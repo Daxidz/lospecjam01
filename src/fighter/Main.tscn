@@ -1,0 +1,111 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://src/fighter/Fighter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Main.gd" type="Script" id=3]
+[ext_resource path="res://assets/img/world/bg.png" type="Texture" id=4]
+[ext_resource path="res://src/world/ParallaxBackground.gd" type="Script" id=5]
+[ext_resource path="res://src/world/PlatformSpawner.gd" type="Script" id=6]
+[ext_resource path="res://src/fighter/change_col.shader" type="Shader" id=7]
+[ext_resource path="res://src/world/CameraShake.gd" type="Script" id=8]
+
+[sub_resource type="ShaderMaterial" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = ExtResource( 7 )
+shader_param/color = Color( 0.992157, 0.733333, 0.152941, 1 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
+
+[sub_resource type="Shader" id=4]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+
+void fragment(){
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = SubResource( 4 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 3 )
+pause_time = 0.08
+
+[node name="Position2D" type="Position2D" parent="."]
+position = Vector2( 142, 51 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+script = ExtResource( 5 )
+camera_velocity = Vector2( 0, 40 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 0, 135 )
+
+[node name="BG" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+material = SubResource( 1 )
+position = Vector2( -10, 221 )
+texture = ExtResource( 4 )
+offset = Vector2( 130, -153 )
+
+[node name="PlatformSpawner" type="Node2D" parent="."]
+script = ExtResource( 6 )
+
+[node name="Timer" type="Timer" parent="PlatformSpawner"]
+autostart = true
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Fighter2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 177, 88 )
+control_disabled = true
+
+[node name="Fighter" parent="." instance=ExtResource( 1 )]
+position = Vector2( 111, 95 )
+
+[node name="Sprite" parent="Fighter" index="0"]
+material = SubResource( 2 )
+frame = 0
+
+[node name="AnimationTree" parent="Fighter" index="4"]
+parameters/playback = SubResource( 3 )
+
+[node name="Sprite2" parent="Fighter" index="8"]
+material = SubResource( 5 )
+
+[node name="Platform" parent="." instance=ExtResource( 2 )]
+position = Vector2( 136, 118 )
+scale = Vector2( 20, 1 )
+
+[node name="PauseTimer" type="Timer" parent="."]
+pause_mode = 2
+wait_time = 5.0
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 120, 67.5 )
+current = true
+script = ExtResource( 8 )
+max_offset = Vector2( 7, 12 )
+
+[connection signal="timeout" from="PlatformSpawner/Timer" to="PlatformSpawner" method="_on_Timer_timeout"]
+[connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
+
+[editable path="Fighter"]
