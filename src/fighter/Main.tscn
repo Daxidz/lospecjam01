@@ -76,9 +76,11 @@ autostart = true
 [node name="Fighter2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 177, 88 )
 control_disabled = true
+color = Color( 0.992157, 0.733333, 0.152941, 1 )
 
 [node name="Fighter" parent="." instance=ExtResource( 1 )]
 position = Vector2( 111, 95 )
+color = Color( 0.964706, 0.247059, 0.298039, 1 )
 
 [node name="Sprite" parent="Fighter" index="0"]
 material = SubResource( 2 )

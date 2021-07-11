@@ -11,6 +11,7 @@ export (int) var jump_speed = -300
 export (int) var gravity = 800
 export (int) var knocback_speed = 200
 
+export (Color) var color
 
 
 
@@ -30,6 +31,8 @@ onready var anim_tree = get_node("AnimationTree")
 onready var state_machine = anim_tree["parameters/playback"]
 
 func _ready():
+	$Particles2D.material.set_shader_param("color", color)
+	$Sprite.material.set_shader_param("color", color)
 	state_machine.travel("idle")
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
 	
@@ -113,7 +116,7 @@ func _on_Hitbox_area_entered(area):
 func _on_KnockbackTimer_timeout():
 	is_knockbacked = false
 	friction = base_friction
-	$Particles2D.emitting = false
+#	$Particles2D.emitting = false
 	state_machine.travel("idle")
 
 

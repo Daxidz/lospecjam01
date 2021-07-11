@@ -12,7 +12,9 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		$Fighter.position = $Position2D.position
+		$Fighter2.position = $Position2D.position + Vector2(20,20)
 		$Fighter.velocity = Vector2.ZERO
+		$Fighter2.velocity = Vector2.ZERO
 
 
 
