@@ -19,6 +19,7 @@ func get_punched(enemy_pos, knockback_power):
 	var y_rand = rand_range(-20, -10)
 	velocity = punch_vec * knockback_power
 	velocity.y += y_rand * punch_vec.length()
+	$Particles2D.emitting = true
 
 
 func _physics_process(delta):

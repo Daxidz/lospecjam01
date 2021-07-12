@@ -112,7 +112,7 @@ start_node = "idle"
 [sub_resource type="AnimationNodeStateMachinePlayback" id=16]
 
 [sub_resource type="RectangleShape2D" id=17]
-extents = Vector2( 9.26507, 5.98657 )
+extents = Vector2( 9.54864, 8.42047 )
 
 [sub_resource type="RectangleShape2D" id=18]
 extents = Vector2( 3, 7 )
@@ -215,7 +215,7 @@ material = SubResource( 2 )
 z_index = 1
 texture = ExtResource( 1 )
 hframes = 12
-frame = 1
+frame = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )
@@ -240,7 +240,7 @@ collision_layer = 4
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2( 10.3695, -2.00573 )
+position = Vector2( 10.3695, -2.14604 )
 shape = SubResource( 17 )
 disabled = true
 
@@ -259,11 +259,13 @@ one_shot = true
 material = SubResource( 20 )
 position = Vector2( 2, -1 )
 frames = SubResource( 28 )
+frame = 5
 playing = true
 
 [node name="Particles2D" type="Particles2D" parent="."]
 material = SubResource( 29 )
 position = Vector2( -1.54339, 4.20923 )
+z_index = 1
 emitting = false
 amount = 9
 lifetime = 0.5
