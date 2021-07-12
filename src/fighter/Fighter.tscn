@@ -14,7 +14,7 @@ shader = ExtResource( 3 )
 shader_param/color = Color( 0.964706, 0.247059, 0.298039, 1 )
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 2.92751, 6.30907 )
+extents = Vector2( 2, 6 )
 
 [sub_resource type="Animation" id=4]
 length = 0.25
@@ -115,7 +115,7 @@ start_node = "idle"
 extents = Vector2( 9.26507, 5.98657 )
 
 [sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 2.53138, 6.46833 )
+extents = Vector2( 3, 7 )
 
 [sub_resource type="Shader" id=19]
 resource_local_to_scene = true
@@ -144,60 +144,60 @@ shader = SubResource( 19 )
 shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
 shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
 
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 96, 96 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 4 )
+region = Rect2( 96, 0, 96, 96 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 96, 96 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 96, 0, 96, 96 )
+
 [sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 96, 96 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 4 )
-region = Rect2( 96, 0, 96, 96 )
-
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 96, 96 )
-
-[sub_resource type="AtlasTexture" id=29]
-atlas = ExtResource( 4 )
-region = Rect2( 96, 0, 96, 96 )
-
-[sub_resource type="AtlasTexture" id=30]
 atlas = ExtResource( 4 )
 region = Rect2( 192, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=31]
+[sub_resource type="AtlasTexture" id=26]
 atlas = ExtResource( 4 )
 region = Rect2( 288, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=32]
+[sub_resource type="AtlasTexture" id=27]
 atlas = ExtResource( 4 )
 region = Rect2( 384, 0, 96, 96 )
 
-[sub_resource type="SpriteFrames" id=27]
+[sub_resource type="SpriteFrames" id=28]
 animations = [ {
-"frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ) ],
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ) ],
 "loop": true,
 "name": "default",
 "speed": 10.0
 } ]
 
-[sub_resource type="ShaderMaterial" id=21]
+[sub_resource type="ShaderMaterial" id=29]
 resource_local_to_scene = true
 shader = ExtResource( 3 )
 shader_param/color = Color( 0.396078, 0.0509804, 0.0509804, 1 )
 
-[sub_resource type="Curve" id=22]
+[sub_resource type="Curve" id=30]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.229545 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=23]
-curve = SubResource( 22 )
+[sub_resource type="CurveTexture" id=31]
+curve = SubResource( 30 )
 
-[sub_resource type="ParticlesMaterial" id=24]
+[sub_resource type="ParticlesMaterial" id=32]
 flag_disable_z = true
 gravity = Vector3( 0, -10, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle_random = 0.57
-scale_curve = SubResource( 23 )
+scale_curve = SubResource( 31 )
 
 [node name="Fighter" type="KinematicBody2D"]
 material = SubResource( 1 )
@@ -207,6 +207,7 @@ color = Color( 0.701961, 0.705882, 0.105882, 1 )
 ko_margin = 30.0
 base_friction = 0.6
 base_acceleration = 0.2
+knockback_time = 0.6
 
 [node name="Sprite" type="Sprite" parent="."]
 material = SubResource( 2 )
@@ -215,8 +216,7 @@ texture = ExtResource( 1 )
 hframes = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( 0.960491, 1.73498 )
+position = Vector2( 0, 2 )
 shape = SubResource( 3 )
 
 [node name="CoyoteTimer" type="Timer" parent="."]
@@ -255,11 +255,13 @@ one_shot = true
 
 [node name="Sprite2" type="AnimatedSprite" parent="."]
 material = SubResource( 20 )
-frames = SubResource( 27 )
+position = Vector2( 2, -1 )
+frames = SubResource( 28 )
+frame = 2
 playing = true
 
 [node name="Particles2D" type="Particles2D" parent="."]
-material = SubResource( 21 )
+material = SubResource( 29 )
 position = Vector2( -1.54339, 4.20923 )
 emitting = false
 amount = 9
@@ -268,7 +270,7 @@ one_shot = true
 explosiveness = 0.18
 randomness = 0.22
 local_coords = false
-process_material = SubResource( 24 )
+process_material = SubResource( 32 )
 texture = ExtResource( 5 )
 
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_CoyoteTimer_timeout"]

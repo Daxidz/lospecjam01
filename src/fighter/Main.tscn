@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://src/fighter/Fighter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://src/fighter/change_col.shader" type="Shader" id=7]
 [ext_resource path="res://src/world/CameraShake.gd" type="Script" id=8]
 [ext_resource path="res://src/fighter/move.shader" type="Shader" id=9]
+[ext_resource path="res://src/world/Box.tscn" type="PackedScene" id=10]
+[ext_resource path="res://src/fighter/FightersTracker.gd" type="Script" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 9 )
@@ -95,7 +97,10 @@ pause_mode = 2
 wait_time = 5.0
 one_shot = true
 
+[node name="OffScreenArrows" type="Node2D" parent="."]
+
 [node name="Fighters" type="Node2D" parent="."]
+script = ExtResource( 11 )
 
 [node name="Fighter" parent="Fighters" instance=ExtResource( 1 )]
 position = Vector2( 113.005, 94.1091 )
@@ -109,7 +114,6 @@ parameters/playback = SubResource( 3 )
 
 [node name="Sprite2" parent="Fighters/Fighter" index="8"]
 material = SubResource( 5 )
-frame = 6
 
 [node name="Particles2D" parent="Fighters/Fighter" index="9"]
 material = SubResource( 6 )
@@ -132,6 +136,9 @@ margin_bottom = 14.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Box" parent="." instance=ExtResource( 10 )]
+position = Vector2( 138.535, 24.277 )
 
 [connection signal="timeout" from="PlatformSpawner/Timer" to="PlatformSpawner" method="_on_Timer_timeout"]
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]

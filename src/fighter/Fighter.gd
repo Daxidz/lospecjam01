@@ -11,6 +11,7 @@ export (int) var jump_speed = -400
 export (int) var gravity = 1100
 var cur_gravity: int = gravity
 export (int) var knocback_speed = 50
+export (int) var hit_power = 50
 
 export (Color) var color
 
@@ -25,6 +26,8 @@ export (float, 0, 1.0) var knockback_friction = 0.1
 var friction = base_friction
 export (float, 0, 1.0) var base_acceleration = 0.15
 export var coyote_time: float = 0.07
+
+export var knockback_time: float = 0.5
 
 var can_jump: bool = true
 var is_knockbacked: bool = false
@@ -45,7 +48,7 @@ func _ready():
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
 	connect("dead", get_tree().get_root().get_node("Main"), "onDead")
 	
-func get_punched(enemy_pos):
+func get_punched(enemy_pos, knockback_power):
 	var punch_vec = position-enemy_pos
 #	punch_vec = Vector2(1/(punch_vec.x+0.1), 1/(punch_vec.y+0.1))
 #	if enemy_pos.x > position.x:
@@ -53,14 +56,13 @@ func get_punched(enemy_pos):
 #	else:
 #		velocity.x = knocback_speed
 	var y_rand = rand_range(-20, -10)
-	velocity = punch_vec * knocback_speed
+	velocity = punch_vec * knockback_power
 	velocity.y += y_rand * punch_vec.length()
 	
 	print(velocity)
 #
 	is_knockbacked = true
-	friction = base_friction / 2
-	$KnockbackTimer.start()
+	$KnockbackTimer.start(knockback_time)
 	$Particles2D.emitting = true
 	
 #	cur_gravity = gravity/2
@@ -138,7 +140,7 @@ func _on_CoyoteTimer_timeout():
 
 func _on_Hitbox_area_entered(area):
 	if area.get_parent() != self:
-		area.get_parent().get_punched(position)
+		area.get_parent().get_punched(position, hit_power)
 
 
 func _on_KnockbackTimer_timeout():
