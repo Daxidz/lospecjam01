@@ -2,6 +2,9 @@ extends Node2D
 
 
 const Platform = preload("res://src/world/Platform.tscn")
+const Box = preload("res://src/world/Box.tscn")
+
+var available_hazards = [Platform, Box]
 
 var rand = RandomNumberGenerator.new()
 
@@ -14,7 +17,14 @@ export var enabled: bool = true
 
 func _ready():
 	rand.randomize()
+	
 
+func spawn_box():
+	
+	var box = Box.instance()
+	box.position.x = rand.randi_range(0, get_viewport_rect().size.x)
+	box.position.y = 0
+	get_parent().get_node("Boxes").add_child(box)
 
 func spawn_platform():
 	var pos: Vector2
@@ -35,3 +45,8 @@ func _on_Timer_timeout():
 	if enabled:
 		for i in nb_platform:
 			spawn_platform();
+
+
+func _on_BoxTimer_timeout():
+	if enabled:
+		spawn_box()

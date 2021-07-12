@@ -1,16 +1,14 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://src/fighter/Fighter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/world/PlatformSpawner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Main.gd" type="Script" id=3]
 [ext_resource path="res://assets/img/world/bg.png" type="Texture" id=4]
 [ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/world/PlatformSpawner.gd" type="Script" id=6]
-[ext_resource path="res://src/fighter/change_col.shader" type="Shader" id=7]
+[ext_resource path="res://src/world/BoxRigid.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/world/CameraShake.gd" type="Script" id=8]
 [ext_resource path="res://src/fighter/move.shader" type="Shader" id=9]
-[ext_resource path="res://src/world/Box.tscn" type="PackedScene" id=10]
-[ext_resource path="res://src/fighter/FightersTracker.gd" type="Script" id=11]
+[ext_resource path="res://src/fighter/ArrowsManager.gd" type="Script" id=12]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 9 )
@@ -18,49 +16,11 @@ shader_param/direction = Vector2( 0, -1 )
 shader_param/speed_scale = 0.3
 shader_param/speed_factor = 1.0
 
-[sub_resource type="ShaderMaterial" id=2]
-resource_local_to_scene = true
-shader = ExtResource( 7 )
-shader_param/color = Color( 0.992157, 0.733333, 0.152941, 1 )
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
-
-[sub_resource type="Shader" id=4]
-resource_local_to_scene = true
-code = "shader_type canvas_item;
-
-uniform vec4 target_col: hint_color;
-uniform vec4 replace_col: hint_color;
-
-void fragment(){
-	vec4 cur_color = texture(TEXTURE, UV);
-	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
-	
-	vec4 d4 = abs(bg_col - target_col);
-    float d = max(max(d4.r, d4.g), d4.b);
-	
-	if ((d < 0.01) && (cur_color.a > 0.0)) {
-		COLOR = replace_col;
-	} else {
-		COLOR.a = 0.0
-	}
-}"
-
-[sub_resource type="ShaderMaterial" id=5]
-resource_local_to_scene = true
-shader = SubResource( 4 )
-shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
-shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
-
-[sub_resource type="ShaderMaterial" id=6]
-resource_local_to_scene = true
-shader = ExtResource( 7 )
-shader_param/color = Color( 0.396078, 0.0509804, 0.0509804, 1 )
-
 [node name="Main" type="Node2D"]
 position = Vector2( 1, 0 )
 script = ExtResource( 3 )
 pause_time = 0.08
+use_platform = true
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 142, 51 )
@@ -72,23 +32,17 @@ current = true
 script = ExtResource( 8 )
 max_offset = Vector2( 7, 12 )
 
-[node name="PlatformSpawner" type="Node2D" parent="."]
-script = ExtResource( 6 )
-speed = 35.0
-nb_platform = 3
-enabled = false
-
-[node name="Timer" type="Timer" parent="PlatformSpawner"]
-autostart = true
+[node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
+enabled = true
 
 [node name="BG" type="Sprite" parent="."]
 material = SubResource( 1 )
-position = Vector2( 120, 67.5 )
+position = Vector2( 119, 68 )
 texture = ExtResource( 4 )
 
 [node name="Platforms" type="Node2D" parent="."]
 
-[node name="Platform" parent="." instance=ExtResource( 2 )]
+[node name="StartPlatform" parent="." instance=ExtResource( 2 )]
 position = Vector2( 136, 118 )
 scale = Vector2( 20, 1 )
 
@@ -98,37 +52,18 @@ wait_time = 5.0
 one_shot = true
 
 [node name="OffScreenArrows" type="Node2D" parent="."]
+script = ExtResource( 12 )
+
+[node name="Boxes" type="Node2D" parent="."]
 
 [node name="Fighters" type="Node2D" parent="."]
-script = ExtResource( 11 )
-
-[node name="Fighter" parent="Fighters" instance=ExtResource( 1 )]
-position = Vector2( 113.005, 94.1091 )
-color = Color( 0.964706, 0.247059, 0.298039, 1 )
-
-[node name="Sprite" parent="Fighters/Fighter" index="0"]
-material = SubResource( 2 )
-
-[node name="AnimationTree" parent="Fighters/Fighter" index="4"]
-parameters/playback = SubResource( 3 )
-
-[node name="Sprite2" parent="Fighters/Fighter" index="8"]
-material = SubResource( 5 )
-
-[node name="Particles2D" parent="Fighters/Fighter" index="9"]
-material = SubResource( 6 )
-
-[node name="Fighter2" parent="Fighters" instance=ExtResource( 1 )]
-position = Vector2( 177, 88 )
-color = Color( 0.992157, 0.733333, 0.152941, 1 )
 
 [node name="Commenter" parent="." instance=ExtResource( 5 )]
-position = Vector2( 17.547, 99.4508 )
+position = Vector2( 18, 102 )
 
 [node name="PlatformTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
-autostart = true
 
 [node name="FPS" type="Label" parent="."]
 margin_right = 40.0
@@ -137,11 +72,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Box" parent="." instance=ExtResource( 10 )]
-position = Vector2( 138.535, 24.277 )
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
 
-[connection signal="timeout" from="PlatformSpawner/Timer" to="PlatformSpawner" method="_on_Timer_timeout"]
+[node name="BoxRigid" parent="." instance=ExtResource( 6 )]
+
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]
-
-[editable path="Fighters/Fighter"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]

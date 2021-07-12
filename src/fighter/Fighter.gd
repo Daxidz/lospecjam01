@@ -49,7 +49,7 @@ func _ready():
 	connect("dead", get_tree().get_root().get_node("Main"), "onDead")
 	
 func get_punched(enemy_pos, knockback_power):
-	var punch_vec = position-enemy_pos
+	var punch_vec: Vector2 = position-enemy_pos
 #	punch_vec = Vector2(1/(punch_vec.x+0.1), 1/(punch_vec.y+0.1))
 #	if enemy_pos.x > position.x:
 #		velocity.x -= knocback_speed
@@ -64,6 +64,7 @@ func get_punched(enemy_pos, knockback_power):
 	is_knockbacked = true
 	$KnockbackTimer.start(knockback_time)
 	$Particles2D.emitting = true
+	$Particles2D.scale + 0.5 * punch_vec.normalized()
 	
 #	cur_gravity = gravity/2
 	
@@ -146,8 +147,7 @@ func _on_Hitbox_area_entered(area):
 func _on_KnockbackTimer_timeout():
 	is_knockbacked = false
 	friction = base_friction
-#	$Particles2D.emitting = false
+	$Particles2D.emitting = false
 	state_machine.travel("idle")
-#	cur_gravity = gravity
 
 
