@@ -73,6 +73,7 @@ max_offset = Vector2( 7, 12 )
 script = ExtResource( 6 )
 speed = 35.0
 nb_platform = 3
+enabled = false
 
 [node name="Timer" type="Timer" parent="PlatformSpawner"]
 autostart = true
@@ -101,12 +102,14 @@ color = Color( 0.964706, 0.247059, 0.298039, 1 )
 
 [node name="Sprite" parent="Fighters/Fighter" index="0"]
 material = SubResource( 3 )
+frame = 1
 
 [node name="AnimationTree" parent="Fighters/Fighter" index="4"]
 parameters/playback = SubResource( 4 )
 
 [node name="Sprite2" parent="Fighters/Fighter" index="8"]
 material = SubResource( 6 )
+frame = 2
 
 [node name="Particles2D" parent="Fighters/Fighter" index="9"]
 material = SubResource( 7 )

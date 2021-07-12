@@ -205,7 +205,7 @@ collision_mask = 0
 script = ExtResource( 2 )
 color = Color( 0.701961, 0.705882, 0.105882, 1 )
 ko_margin = 30.0
-base_friction = 0.3
+base_friction = 0.6
 base_acceleration = 0.2
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -213,7 +213,6 @@ material = SubResource( 2 )
 z_index = 1
 texture = ExtResource( 1 )
 hframes = 12
-frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -257,7 +256,6 @@ one_shot = true
 [node name="Sprite2" type="AnimatedSprite" parent="."]
 material = SubResource( 20 )
 frames = SubResource( 27 )
-frame = 3
 playing = true
 
 [node name="Particles2D" type="Particles2D" parent="."]

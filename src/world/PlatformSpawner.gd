@@ -9,6 +9,8 @@ export var speed: float = 100
 var speed_factor: float = 1.0
 export var nb_platform: int = 2
 
+export var enabled: bool = true
+
 
 func _ready():
 	rand.randomize()
@@ -30,5 +32,6 @@ func spawn_platform():
 
 
 func _on_Timer_timeout():
-	for i in nb_platform:
-		spawn_platform();
+	if enabled:
+		for i in nb_platform:
+			spawn_platform();

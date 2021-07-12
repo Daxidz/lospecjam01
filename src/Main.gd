@@ -9,6 +9,7 @@ var cur_fighter: int = 0
 var game_speed: float = 1.0
 
 
+
 func set_game_speed(speed: float):
 #	$BG.material.set_shader_param("speed_factor", speed)
 #	for f in $Fighters.get_children():

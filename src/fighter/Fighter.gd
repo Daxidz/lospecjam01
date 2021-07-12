@@ -21,6 +21,7 @@ var velocity = Vector2.ZERO
 var speed_factor
 
 export (float, 0, 1.0) var base_friction = 0.2
+export (float, 0, 1.0) var knockback_friction = 0.1
 var friction = base_friction
 export (float, 0, 1.0) var base_acceleration = 0.15
 export var coyote_time: float = 0.07
@@ -51,14 +52,18 @@ func get_punched(enemy_pos):
 #		velocity.x -= knocback_speed
 #	else:
 #		velocity.x = knocback_speed
+	var y_rand = rand_range(-20, -10)
 	velocity = punch_vec * knocback_speed
+	velocity.y += y_rand * punch_vec.length()
+	
+	print(velocity)
 #
 	is_knockbacked = true
 	friction = base_friction / 2
 	$KnockbackTimer.start()
 	$Particles2D.emitting = true
 	
-	cur_gravity = gravity/2
+#	cur_gravity = gravity/2
 	
 	state_machine.travel("knockback")
 	emit_signal("punched")
@@ -76,6 +81,8 @@ func get_input():
 	var in_air = !is_on_floor();
 	var dir = 0
 	
+	friction = base_friction
+	
 	if !control_disabled && !is_knockbacked:
 		if Input.is_action_pressed("ui_right"+str(controller_nb)):
 			dir += 1
@@ -90,6 +97,8 @@ func get_input():
 			cur_speed *= 0.1
 		velocity.x = lerp(velocity.x, dir * cur_speed, base_acceleration)
 	else:
+		if is_knockbacked:
+			friction = knockback_friction
 		velocity.x = lerp(velocity.x, 0, friction)
 		
 		
@@ -137,6 +146,6 @@ func _on_KnockbackTimer_timeout():
 	friction = base_friction
 #	$Particles2D.emitting = false
 	state_machine.travel("idle")
-	cur_gravity = gravity
+#	cur_gravity = gravity
 
 
