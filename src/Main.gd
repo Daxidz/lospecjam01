@@ -25,8 +25,7 @@ func reset_fighters():
 		pos += Vector2(20, 20)
 		f.velocity = Vector2.ZERO
 		set_game_speed(1)	
-	
-	$Label.text = ""
+
 
 func _ready():
 	var i = 0
@@ -55,7 +54,7 @@ func onPunched():
 	$Camera2D.add_trauma(0.6)
 	
 func onDead(player_nb: int):
-	$Label.text = "Player " + str(player_nb) + "is dead"
+#	$Label.text = "Player " + str(player_nb) + "is dead"
 #	$Camera2D.stop_trauma()
 #	$Camera2D.decay = 0.9
 #	$Camera2D.add_trauma(0.2)
