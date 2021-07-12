@@ -15,4 +15,4 @@ func _process(delta):
 		queue_free()
 
 func _physics_process(delta):
-	position.y += speed
+	position.y += speed * delta

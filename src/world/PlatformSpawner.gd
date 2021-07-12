@@ -5,7 +5,8 @@ const Platform = preload("res://src/world/Platform.tscn")
 
 var rand = RandomNumberGenerator.new()
 
-export var speed: float = 0.7
+export var speed: float = 100
+var speed_factor: float = 1.0
 export var nb_platform: int = 2
 
 
@@ -21,7 +22,7 @@ func spawn_platform():
 	
 	var platform = Platform.instance()
 	
-	platform.speed = speed
+	platform.speed = speed * speed_factor
 	
 	platform.position = pos
 	

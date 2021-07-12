@@ -25,6 +25,9 @@ func _ready():
 func add_trauma(amount):
 	trauma = min(trauma + amount, 1.0)
 	
+func stop_trauma():
+	trauma = 0
+	
 func _process(delta):
 	if target:
 		global_position = get_node(target).global_position
