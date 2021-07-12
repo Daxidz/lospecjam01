@@ -25,23 +25,29 @@ export var coyote_time: float = 0.07
 var can_jump: bool = true
 var is_knockbacked: bool = false
 
+var controller_nb: int = -1 # assigned to a controller
+
 
 # STATE
 onready var anim_tree = get_node("AnimationTree")
 onready var state_machine = anim_tree["parameters/playback"]
 
 func _ready():
+	$Hitbox/CollisionShape2D.disabled = true
 	$Particles2D.material.set_shader_param("color", color)
 	$Sprite.material.set_shader_param("color", color)
 	state_machine.travel("idle")
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
 	
 func get_punched(enemy_pos):
-	if enemy_pos.x > position.x:
-		velocity.x -= knocback_speed
-	else:
-		velocity.x = knocback_speed
-		
+	var punch_vec = position-enemy_pos
+#	punch_vec = Vector2(1/(punch_vec.x+0.1), 1/(punch_vec.y+0.1))
+#	if enemy_pos.x > position.x:
+#		velocity.x -= knocback_speed
+#	else:
+#		velocity.x = knocback_speed
+	velocity += punch_vec * knocback_speed
+#
 	is_knockbacked = true
 	friction = base_friction / 2
 	$KnockbackTimer.start()
@@ -64,14 +70,14 @@ func get_input():
 	var dir = 0
 	
 	if !control_disabled:
-		if Input.is_action_pressed("ui_right"):
+		if Input.is_action_pressed("ui_right"+str(controller_nb)):
 			dir += 1
 			scale_x_children(1)
-		if Input.is_action_pressed("ui_left"):
+		if Input.is_action_pressed("ui_left"+str(controller_nb)):
 			dir -= 1
 			scale_x_children(-1)
 	if dir != 0:
-		if in_air:
+		if in_air or is_knockbacked:
 			cur_speed *= 0.5
 		velocity.x = lerp(velocity.x, dir * cur_speed, base_acceleration)
 	else:
@@ -83,8 +89,9 @@ func punch():
 	state_machine.travel("attack")
 	
 func _input(event):
-	if event.is_action_pressed("ui_select"):
-		punch()
+	if event.is_action_pressed("ui_select"+str(controller_nb)):
+		if (!control_disabled):
+			punch()
 		
 		
 func _physics_process(delta):
@@ -97,7 +104,7 @@ func _physics_process(delta):
 		can_jump = true
 		
 	velocity = move_and_slide(velocity, Vector2.UP)
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("ui_accept"+str(controller_nb)):
 		if control_disabled:
 			return
 		if can_jump:

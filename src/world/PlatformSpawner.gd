@@ -5,6 +5,9 @@ const Platform = preload("res://src/world/Platform.tscn")
 
 var rand = RandomNumberGenerator.new()
 
+export var speed: float = 0.7
+export var nb_platform: int = 2
+
 
 func _ready():
 	rand.randomize()
@@ -18,7 +21,7 @@ func spawn_platform():
 	
 	var platform = Platform.instance()
 	
-	platform.speed = 0.68
+	platform.speed = speed
 	
 	platform.position = pos
 	
@@ -26,5 +29,5 @@ func spawn_platform():
 
 
 func _on_Timer_timeout():
-	for i in 2:
+	for i in nb_platform:
 		spawn_platform();
