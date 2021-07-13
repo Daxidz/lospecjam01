@@ -1,11 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/world/PlatformSpawner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Main.gd" type="Script" id=3]
 [ext_resource path="res://assets/img/world/bg.png" type="Texture" id=4]
 [ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/world/BoxRigid.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/world/CameraShake.gd" type="Script" id=8]
 [ext_resource path="res://src/fighter/move.shader" type="Shader" id=9]
 [ext_resource path="res://src/fighter/ArrowsManager.gd" type="Script" id=12]
@@ -20,6 +19,7 @@ shader_param/speed_factor = 1.0
 position = Vector2( 1, 0 )
 script = ExtResource( 3 )
 pause_time = 0.08
+nb_players = 2
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 142, 51 )
@@ -32,6 +32,7 @@ script = ExtResource( 8 )
 max_offset = Vector2( 7, 12 )
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
+enabled = true
 
 [node name="BG" type="Sprite" parent="."]
 material = SubResource( 1 )
@@ -74,7 +75,9 @@ __meta__ = {
 wait_time = 3.0
 one_shot = true
 
-[node name="BoxRigid" parent="." instance=ExtResource( 6 )]
+[node name="Splatters" type="Node2D" parent="."]
+
+[node name="SFX" type="AudioStreamPlayer2D" parent="."]
 
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]
