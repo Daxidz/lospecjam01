@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/fighter/Bandana.gd" type="Script" id=1]
+
+[node name="Bandana" type="Line2D"]
+points = PoolVector2Array( 0, 0, -6, 0, -10, 0, -13, 0, -15, 0 )
+width = 1.5
+script = ExtResource( 1 )
+freq = 2.0

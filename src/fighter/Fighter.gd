@@ -43,6 +43,7 @@ func _ready():
 	$Hitbox/CollisionShape2D.disabled = true
 	$Particles2D.material.set_shader_param("color", color)
 	$Sprite.material.set_shader_param("color", color)
+	$Bandana.default_color = color
 	#$Sprite2.material.set_shader_param("replace_col", color)
 	state_machine.travel("idle")
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
