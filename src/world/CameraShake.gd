@@ -29,8 +29,10 @@ func stop_trauma():
 	trauma = 0
 	
 func _process(delta):
-	if target:
-		global_position = get_node(target).global_position
+#	if target:
+#		global_position = get_node(target).global_position
+#	else:
+#		global_position = get_viewport_rect().size/2
 	if trauma:
 		trauma = max(trauma - decay * delta, 0)
 		shake()
@@ -41,3 +43,12 @@ func shake():
 	rotation = max_roll * amount * noise.get_noise_2d(noise.seed, noise_y)
 	offset.x = max_offset.x * amount * noise.get_noise_2d(noise.seed*2, noise_y)
 	offset.y = max_offset.y * amount * noise.get_noise_2d(noise.seed*3, noise_y)
+	
+func zoom_on(new_zoom: Vector2):
+	$Tween.interpolate_property(self, "zoom", Vector2(zoom), new_zoom, 1, Tween.TRANS_SINE)
+	if target:
+		$Tween.interpolate_property(self, "global_position", global_position, get_node(target).global_position, 1, Tween.TRANS_SINE, Tween.EASE_OUT)
+	else:
+		$Tween.interpolate_property(self, "global_position", global_position, get_viewport_rect().size/2, 1, Tween.TRANS_SINE, Tween.EASE_OUT)
+	
+	$Tween.start()

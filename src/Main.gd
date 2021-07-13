@@ -1,8 +1,10 @@
 extends Node2D
 
 const Fighter = preload("res://src/fighter/Fighter.tscn")
-
 const Box = preload("res://src/world/BoxRigid.tscn")
+const Splater = preload("res://BloodSplatter.tscn")
+
+const HitSound = preload("res://assets/sounds/hit.wav")
 
 export var pause_time: float = 0.02
 
@@ -18,10 +20,12 @@ var lut_places = [0, 3, 1, 2]
 
 var lut_colors = [0xf63f4cff, 0x4159cbff, 0xfdbb27ff, 0x8d902eff]
 
-export var nb_players: int = 2
+export var nb_players: int = 4
 var nb_dead: int = 0
 
 export var use_platform: bool
+
+var viewport_size: Vector2
 
 
 func set_game_speed(speed: float):
@@ -55,6 +59,10 @@ func delete_boxes():
 	for b in $Boxes.get_children():
 		b.queue_free()
 	
+func delete_splaters():
+	for s in $Splatters.get_children():
+		s.queue_free()
+	
 func enable_start_platform(enable: bool):
 	$StartPlatform.visible = enable
 	$StartPlatform/CollisionShape2D.disabled = not enable
@@ -74,12 +82,17 @@ func start_game():
 	reset_fighters()
 	enable_players(false)
 	delete_boxes()
+	delete_splaters()
 	$SpawnTimer.start(1)
 	nb_dead = 0
+	$Camera2D.target = null
+	$Camera2D.zoom_on(Vector2(1, 1))
 	
 
 func _ready():
+	viewport_size = get_viewport_rect().size
 	start_game()
+	
 
 func _process(delta):
 	$FPS.text = str(Engine.get_frames_per_second())
@@ -96,32 +109,52 @@ func _input(event):
 		cur_fighter = (cur_fighter +1) % $Fighters.get_child_count()
 		$Fighters.get_child(cur_fighter).control_disabled = false
 		
-	if event is InputEventMouseButton:
-		var b = Box.instance()
-		b.position = event.position
-		$Boxes.add_child(b)
+	if event is InputEventMouseButton and event.is_pressed():
+		spawn_splatter(event.position, Color.red)
+#		var b = Box.instance()
+#		b.position = event.position
+#		$Boxes.add_child(b)
 
-func fight_end():
+func fight_end(player):
 	fight_running = false
 	set_game_speed(0.4)
+	print(player.get_path())
+	$Camera2D.target = player.get_path()
+	$Camera2D.zoom_on(Vector2(0.5,0.5))
 
 func game_end():
 	pass
 	
 	
-func onPunched():
+func onPunched(player):
 	$PauseTimer.start(pause_time)
 #	get_tree().paused = true
 	$Camera2D.decay = 0.8
 	$Camera2D.add_trauma(0.6)
+	$Commenter.next_text()
+	$SFX.position = player.position
+	$SFX.set_stream(HitSound)
+	$SFX.pitch_scale = rand_range(0.8, 1.1)
+	$SFX.play()
 	
-func onDead(player_nb: int):
-	for f in $Fighters.get_children():
-		if f.controller_nb == player_nb:
-			f.queue_free()
+	
+func spawn_splatter(position: Vector2, color: Color):
+	var s = Splater.instance()
+	s.get_node("Particles2D").material.set_shader_param("replace_col", color)
+	s.position = position
+	s.position.x = clamp(s.position.x, 0, viewport_size.x)
+	s.position.y = clamp(s.position.y, 0, viewport_size.y)
+	$Splatters.add_child(s)
+	
+	
+func onDead(player):
+	spawn_splatter(player.position, player.color)
+	player.queue_free()
 	nb_dead+=1
 	if nb_dead == nb_players-1:
-		fight_end()
+		for f in $Fighters.get_children():
+			if f != player:
+				fight_end(f)
 
 
 func _on_PauseTimer_timeout():

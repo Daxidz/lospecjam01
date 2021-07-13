@@ -43,6 +43,8 @@ func _ready():
 	$Hitbox/CollisionShape2D.disabled = true
 	$Particles2D.material.set_shader_param("color", color)
 	$Sprite.material.set_shader_param("color", color)
+	$Bandana.default_color = color
+	$RibbonPhysic/Line2D.default_color = color
 	#$Sprite2.material.set_shader_param("replace_col", color)
 	state_machine.travel("idle")
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
@@ -69,7 +71,7 @@ func get_punched(enemy_pos, knockback_power):
 #	cur_gravity = gravity/2
 	
 	state_machine.travel("knockback")
-	emit_signal("punched")
+	emit_signal("punched", self)
 	
 	
 	
@@ -116,7 +118,7 @@ func _input(event):
 
 func _process(delta):
 	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y +ko_margin or position.x < -ko_margin:
-		emit_signal("dead", controller_nb)
+		emit_signal("dead", self)
 		
 func _physics_process(delta):
 	get_input()
