@@ -85,6 +85,8 @@ func start_game():
 	delete_splaters()
 	$SpawnTimer.start(1)
 	nb_dead = 0
+	$Camera2D.target = null
+	$Camera2D.zoom_on(Vector2(1, 1))
 	
 
 func _ready():
@@ -113,9 +115,12 @@ func _input(event):
 #		b.position = event.position
 #		$Boxes.add_child(b)
 
-func fight_end():
+func fight_end(player):
 	fight_running = false
 	set_game_speed(0.4)
+	print(player.get_path())
+	$Camera2D.target = player.get_path()
+	$Camera2D.zoom_on(Vector2(0.5,0.5))
 
 func game_end():
 	pass
@@ -147,7 +152,9 @@ func onDead(player):
 	player.queue_free()
 	nb_dead+=1
 	if nb_dead == nb_players-1:
-		fight_end()
+		for f in $Fighters.get_children():
+			if f != player:
+				fight_end(f)
 
 
 func _on_PauseTimer_timeout():
