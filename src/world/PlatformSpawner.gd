@@ -2,6 +2,7 @@ extends Node2D
 
 
 const Platform = preload("res://src/world/Platform.tscn")
+#const Box = preload("res://src/world/BoxRigid.tscn")
 const Box = preload("res://src/world/Box.tscn")
 
 var available_hazards = [Platform, Box]
@@ -50,3 +51,4 @@ func _on_Timer_timeout():
 func _on_BoxTimer_timeout():
 	if enabled:
 		spawn_box()
+		

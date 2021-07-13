@@ -4,11 +4,11 @@
 
 [node name="PlatformSpawner" type="Node2D"]
 script = ExtResource( 1 )
-speed = 35.0
-nb_platform = 3
+speed = 20.0
 enabled = false
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
 autostart = true
 
 [node name="BoxTimer" type="Timer" parent="."]

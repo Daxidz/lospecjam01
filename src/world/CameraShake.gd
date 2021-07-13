@@ -8,6 +8,8 @@ export var max_roll = 0.1  # Maximum rotation in radians (use sparingly).
 
 export (NodePath) var target  # Assign the node this camera will follow.
 
+export var zoom_time: float = 1.0
+
 
 var trauma = 0.0  # Current shake strength.
 
@@ -45,10 +47,10 @@ func shake():
 	offset.y = max_offset.y * amount * noise.get_noise_2d(noise.seed*3, noise_y)
 	
 func zoom_on(new_zoom: Vector2):
-	$Tween.interpolate_property(self, "zoom", Vector2(zoom), new_zoom, 1, Tween.TRANS_SINE)
+	$Tween.interpolate_property(self, "zoom", Vector2(zoom), new_zoom, zoom_time*2, Tween.TRANS_LINEAR)
 	if target:
-		$Tween.interpolate_property(self, "global_position", global_position, get_node(target).global_position, 1, Tween.TRANS_SINE, Tween.EASE_OUT)
+		$Tween.interpolate_property(self, "global_position", global_position, get_node(target).global_position, zoom_time, Tween.TRANS_SINE, Tween.EASE_OUT)
 	else:
-		$Tween.interpolate_property(self, "global_position", global_position, get_viewport_rect().size/2, 1, Tween.TRANS_SINE, Tween.EASE_OUT)
+		$Tween.interpolate_property(self, "global_position", global_position, get_viewport_rect().size/2, zoom_time, Tween.TRANS_SINE, Tween.EASE_OUT)
 	
 	$Tween.start()

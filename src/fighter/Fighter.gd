@@ -30,6 +30,7 @@ export var coyote_time: float = 0.07
 export var knockback_time: float = 0.5
 
 var can_jump: bool = true
+var can_rotate: bool = true
 var is_knockbacked: bool = false
 
 var controller_nb: int = -1 # assigned to a controller
@@ -45,30 +46,20 @@ func _ready():
 	$Sprite.material.set_shader_param("color", color)
 	$Bandana.default_color = color
 	$RibbonPhysic/Line2D.default_color = color
-	#$Sprite2.material.set_shader_param("replace_col", color)
 	state_machine.travel("idle")
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
 	connect("dead", get_tree().get_root().get_node("Main"), "onDead")
 	
 func get_punched(enemy_pos, knockback_power):
 	var punch_vec: Vector2 = position-enemy_pos
-#	punch_vec = Vector2(1/(punch_vec.x+0.1), 1/(punch_vec.y+0.1))
-#	if enemy_pos.x > position.x:
-#		velocity.x -= knocback_speed
-#	else:
-#		velocity.x = knocback_speed
 	var y_rand = rand_range(-20, -10)
 	velocity = punch_vec * knockback_power
 	velocity.y += y_rand * punch_vec.length()
-	
-	print(velocity)
 #
 	is_knockbacked = true
 	$KnockbackTimer.start(knockback_time)
 	$Particles2D.emitting = true
 	$Particles2D.scale + 0.5 * punch_vec.normalized()
-	
-#	cur_gravity = gravity/2
 	
 	state_machine.travel("knockback")
 	emit_signal("punched", self)
@@ -80,21 +71,27 @@ func scale_x_children(new_scale: int):
 		if not child.get("scale") == null:
 			child.scale.x = new_scale
 	
+	$RibbonPhysic.position.x = -1 if new_scale == 1 else 1
+	
 func get_input():
 		
 	var cur_speed = speed
 	var in_air = !is_on_floor();
 	var dir = 0
 	
+	can_rotate = $AnimationPlayer.current_animation != "attack" and $JumpDirTimer.is_stopped()
+	
 	friction = base_friction
 	
 	if !control_disabled && !is_knockbacked:
 		if Input.is_action_pressed("ui_right"+str(controller_nb)):
 			dir += 1
-			scale_x_children(1)
+			if can_rotate:
+				scale_x_children(1)
 		if Input.is_action_pressed("ui_left"+str(controller_nb)):
 			dir -= 1
-			scale_x_children(-1)
+			if can_rotate:
+				scale_x_children(-1)
 	if dir != 0:
 		if in_air:
 			cur_speed *= 0.5
@@ -134,6 +131,8 @@ func _physics_process(delta):
 		if control_disabled:
 			return
 		if can_jump:
+			can_rotate = false
+			$JumpDirTimer.start()
 			velocity.y = jump_speed
 
 
@@ -153,3 +152,5 @@ func _on_KnockbackTimer_timeout():
 	state_machine.travel("idle")
 
 
+func _on_JumpDirTimer_timeout():
+	can_rotate = true

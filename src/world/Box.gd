@@ -4,8 +4,7 @@ extends KinematicBody2D
 var gravity: int = 400
 
 var velocity: Vector2
-var knockback_power: int = 50
-var hit_power: int = 100
+var hit_power: int = 80
 
 var friction: float = 0.2
 
@@ -24,10 +23,11 @@ func get_punched(enemy_pos, knockback_power):
 
 func _physics_process(delta):
 	velocity.y += gravity * delta
+	
+	velocity.x = lerp(velocity.x, 0, friction)
 	velocity = move_and_slide(velocity, Vector2.UP)
 	
 	
-	velocity.x = lerp(velocity.x, 0, friction)
 	
 func _on_Hitbox_area_entered(area):
 	if area.get_parent() != self:

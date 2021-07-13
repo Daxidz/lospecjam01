@@ -1,7 +1,8 @@
 extends Node2D
 
 const Fighter = preload("res://src/fighter/Fighter.tscn")
-const Box = preload("res://src/world/BoxRigid.tscn")
+#const Box = preload("res://src/world/BoxRigid.tscn")
+const Box = preload("res://src/world/Box.tscn")
 const Splater = preload("res://BloodSplatter.tscn")
 
 const HitSound = preload("res://assets/sounds/hit.wav")
@@ -24,6 +25,8 @@ export var nb_players: int = 4
 var nb_dead: int = 0
 
 export var use_platform: bool
+
+export var inactive_time: float = 1.0
 
 var viewport_size: Vector2
 
@@ -83,7 +86,10 @@ func start_game():
 	enable_players(false)
 	delete_boxes()
 	delete_splaters()
-	$SpawnTimer.start(1)
+	if inactive_time != 0.0:
+		$SpawnTimer.start(inactive_time)
+	else:
+		enable_players(true)
 	nb_dead = 0
 	$Camera2D.target = null
 	$Camera2D.zoom_on(Vector2(1, 1))
@@ -96,6 +102,9 @@ func _ready():
 
 func _process(delta):
 	$FPS.text = str(Engine.get_frames_per_second())
+	for p in $Platforms.get_children():
+		if p.position.y >= $StartPlatform.position.y:
+			p.queue_free()
 
 func _input(event):
 	if event.is_action_pressed("ui_accept1") and not fight_running:
@@ -110,10 +119,11 @@ func _input(event):
 		$Fighters.get_child(cur_fighter).control_disabled = false
 		
 	if event is InputEventMouseButton and event.is_pressed():
-		spawn_splatter(event.position, Color.red)
-#		var b = Box.instance()
-#		b.position = event.position
-#		$Boxes.add_child(b)
+#		spawn_splatter(event.position, Color.red)
+		var b = Box.instance()
+		b.position = event.position
+		$Boxes.add_child(b)
+		pass
 
 func fight_end(player):
 	fight_running = false
@@ -131,7 +141,7 @@ func onPunched(player):
 #	get_tree().paused = true
 	$Camera2D.decay = 0.8
 	$Camera2D.add_trauma(0.6)
-	$Commenter.next_text()
+	$Comentator.next_text()
 	$SFX.position = player.position
 	$SFX.set_stream(HitSound)
 	$SFX.pitch_scale = rand_range(0.8, 1.1)

@@ -19,7 +19,7 @@ shader_param/speed_factor = 1.0
 position = Vector2( 1, 0 )
 script = ExtResource( 3 )
 pause_time = 0.08
-nb_players = 2
+inactive_time = 0.2
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 142, 51 )
@@ -29,11 +29,11 @@ position = Vector2( 120, 67.5 )
 current = true
 script = ExtResource( 8 )
 max_offset = Vector2( 7, 12 )
+zoom_time = 0.3
 
 [node name="Tween" type="Tween" parent="Camera2D"]
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
-enabled = true
 
 [node name="BG" type="Sprite" parent="."]
 material = SubResource( 1 )
@@ -58,14 +58,12 @@ script = ExtResource( 12 )
 
 [node name="Fighters" type="Node2D" parent="."]
 
-[node name="Commenter" parent="." instance=ExtResource( 5 )]
-position = Vector2( 18, 102 )
-
 [node name="PlatformTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 
 [node name="FPS" type="Label" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0
 __meta__ = {
@@ -79,6 +77,9 @@ one_shot = true
 [node name="Splatters" type="Node2D" parent="."]
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="."]
+
+[node name="Comentator" parent="." instance=ExtResource( 5 )]
+position = Vector2( 0, 93 )
 
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]
