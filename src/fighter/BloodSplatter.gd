@@ -1,8 +1,13 @@
 extends Sprite
 
+var color: Color
+
 func splater():
+	material.set_shader_param("replace_col", color)
 	$Particles2D.emitting = true
 	$Particles2D.speed_scale = 1.6
+	$SmallSplatters.speed_scale = 1.6
+	$SmallSplatters.emitting = true
 	$Timer.start(0.1)
 
 func _ready():
@@ -13,3 +18,4 @@ func _on_Timer_timeout():
 #	$Particles2D.emitting = false
 	
 	$Particles2D.speed_scale = 0
+	$SmallSplatters.speed_scale = 0

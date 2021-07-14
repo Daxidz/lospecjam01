@@ -25,14 +25,10 @@ func _ready():
 	modulate = Color(1,1,1,0)
 
 func _on_Timer_timeout():
-	print("keke")
 	if nb_visible < text_lenght:
 		label.text += text[nb_visible]
-		print(text[nb_visible])
-		#label.percent_visible += step
 		timer.start(text_speed)
 	else:
-		print("stopping")
 		if autostop:
 			$EndTimer.start(1)
 
@@ -59,7 +55,7 @@ func stop():
 	label.text = ""
 	nb_visible = 0
 	$Tween.interpolate_property($TextBox2, "rect_size", $TextBox2.rect_size, Vector2(0, $TextBox2.rect_size.y), 0.5, Tween.TRANS_BOUNCE)
-	$Tween.interpolate_property(self, "modulate", Color(1,1,1,1), Color(1,1,1,0), 0.5, Tween.TRANS_SINE)
+#	$Tween.interpolate_property(self, "modulate", Color(1,1,1,1), Color(1,1,1,0), 0.5, Tween.TRANS_SINE)
 	$Tween.start()
 
 

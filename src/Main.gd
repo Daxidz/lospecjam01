@@ -119,10 +119,10 @@ func _input(event):
 		$Fighters.get_child(cur_fighter).control_disabled = false
 		
 	if event is InputEventMouseButton and event.is_pressed():
-#		spawn_splatter(event.position, Color.red)
-		var b = Box.instance()
-		b.position = event.position
-		$Boxes.add_child(b)
+		spawn_splatter(event.position, Color.red)
+#		var b = Box.instance()
+#		b.position = event.position
+#		$Boxes.add_child(b)
 		pass
 
 func fight_end(player):
@@ -145,13 +145,13 @@ func onPunched(player):
 	$SFX.position = player.position
 	$SFX.set_stream(HitSound)
 	$SFX.pitch_scale = rand_range(0.8, 1.1)
-	$SFX.play()
+#	$SFX.play()
 	
 	
 func spawn_splatter(position: Vector2, color: Color):
 	var s = Splater.instance()
-	s.get_node("Particles2D").material.set_shader_param("replace_col", color)
 	s.position = position
+	s.color = color
 	s.position.x = clamp(s.position.x, 0, viewport_size.x)
 	s.position.y = clamp(s.position.y, 0, viewport_size.y)
 	$Splatters.add_child(s)
