@@ -34,7 +34,6 @@ zoom_time = 0.3
 [node name="Tween" type="Tween" parent="Camera2D"]
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
-enabled = true
 
 [node name="BG" type="Sprite" parent="."]
 material = SubResource( 1 )
@@ -78,9 +77,11 @@ one_shot = true
 [node name="Splatters" type="Node2D" parent="."]
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="."]
+volume_db = -7.068
+pitch_scale = 0.77
 
 [node name="Comentator" parent="." instance=ExtResource( 5 )]
-position = Vector2( 0, 93 )
+position = Vector2( 0, 91 )
 
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]

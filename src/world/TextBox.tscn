@@ -1,16 +1,28 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/commenter/TextBox.gd" type="Script" id=1]
 [ext_resource path="res://assets/img/commenter/textbox.png" type="Texture" id=2]
 
-[sub_resource type="DynamicFontData" id=1]
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+
+void fragment() {
+	COLOR = vec4(0.0, 0., 0., 0.);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="DynamicFontData" id=3]
 font_path = "res://assets/fonts/smashcat.ttf"
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=4]
 size = 5
-font_data = SubResource( 1 )
+font_data = SubResource( 3 )
 
 [node name="Node2D" type="Node2D"]
+material = SubResource( 2 )
 script = ExtResource( 1 )
 text_speed = 0.08
 
@@ -20,6 +32,7 @@ one_shot = true
 [node name="Tween" type="Tween" parent="."]
 
 [node name="TextBox2" type="MarginContainer" parent="."]
+use_parent_material = true
 margin_right = 14.0
 margin_bottom = 16.0
 grow_horizontal = 0
@@ -58,7 +71,7 @@ margin_bottom = 13.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_vertical = 1
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0.917647, 0.882353, 0.941176, 1 )
 text = "dwede"
 autowrap = true
@@ -70,5 +83,4 @@ __meta__ = {
 one_shot = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
-[connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]
 [connection signal="timeout" from="EndTimer" to="." method="_on_EndTimer_timeout"]

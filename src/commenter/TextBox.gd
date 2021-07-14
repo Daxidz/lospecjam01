@@ -43,6 +43,8 @@ func start():
 	
 	$TextBox2.rect_size.x = text.length() * 6 + 5
 	$TextBox2.rect_size.y = 10
+	$Tween.interpolate_property($TextBox2, "rect_size", Vector2(0, $TextBox2.rect_size.y), Vector2(text.length() * 6 + 5, 10), 0.5, Tween.TRANS_BOUNCE)
+	$Tween.start()
 	$TextBox2.rect_position = Vector2.ZERO
 	modulate = Color(1,1,1,1)
 	
@@ -55,6 +57,8 @@ func start():
 func stop():
 	label.text = ""
 	nb_visible = 0
+	
+	$Tween.connect("tween_all_completed", self, "_on_Tween_tween_all_completed")
 	$Tween.interpolate_property($TextBox2, "rect_size", $TextBox2.rect_size, Vector2(0, $TextBox2.rect_size.y), 0.5, Tween.TRANS_BOUNCE)
 #	$Tween.interpolate_property(self, "modulate", Color(1,1,1,1), Color(1,1,1,0), 0.5, Tween.TRANS_SINE)
 	$Tween.start()
@@ -64,6 +68,7 @@ func _on_Tween_tween_all_completed():
 	emit_signal("closed")
 	closed = true
 	visible = false
+	$Tween.disconnect("tween_all_completed", self, "_on_Tween_tween_all_completed")
 
 
 func _on_EndTimer_timeout():

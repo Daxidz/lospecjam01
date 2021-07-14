@@ -20,6 +20,7 @@ export var ko_margin: float = 10.0
 var velocity = Vector2.ZERO
 
 var speed_factor
+var paused: bool = false
 
 export (float, 0, 1.0) var base_friction = 0.2
 export (float, 0, 1.0) var knockback_friction = 0.1
@@ -33,6 +34,10 @@ var can_jump: bool = true
 var can_rotate: bool = true
 var is_knockbacked: bool = false
 
+var jump_multiplier: float = 8
+
+var fall_multiplier: float = 0.0
+
 var controller_nb: int = -1 # assigned to a controller
 
 
@@ -40,15 +45,16 @@ var controller_nb: int = -1 # assigned to a controller
 onready var anim_tree = get_node("AnimationTree")
 onready var state_machine = anim_tree["parameters/playback"]
 
+
 func _ready():
 	$Hitbox/CollisionShape2D.disabled = true
 	$Particles2D.material.set_shader_param("color", color)
 	$Sprite.material.set_shader_param("color", color)
-	$Bandana.default_color = color
 	$RibbonPhysic/Line2D.default_color = color
 	state_machine.travel("idle")
 	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
 	connect("dead", get_tree().get_root().get_node("Main"), "onDead")
+	paused = false
 	
 func get_punched(enemy_pos, knockback_power):
 	var punch_vec: Vector2 = position-enemy_pos
@@ -97,6 +103,7 @@ func get_input():
 			cur_speed *= 0.5
 		if is_knockbacked:
 			cur_speed *= 0.1
+			
 		velocity.x = lerp(velocity.x, dir * cur_speed, base_acceleration)
 	else:
 		if is_knockbacked:
@@ -114,7 +121,10 @@ func _input(event):
 			punch()
 
 func _process(delta):
+	if paused:
+		return
 	var cur_anim: String = "idle"
+	
 	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y +ko_margin or position.x < -ko_margin:
 		emit_signal("dead", self)
 	
@@ -130,6 +140,10 @@ func _process(delta):
 		state_machine.travel(cur_anim)
 		
 func _physics_process(delta):
+	
+	if paused:
+		return
+		
 	get_input()
 	velocity.y += cur_gravity * delta
 	
@@ -138,7 +152,16 @@ func _physics_process(delta):
 	elif is_on_floor():
 		can_jump = true
 		
-	velocity = move_and_slide(velocity, Vector2.UP)
+#
+	# jump/fall mutliplier
+	if velocity.y > 0.1:
+#		velocity += Vector2.DOWN * cur_gravity * delta * fall_multiplier
+		pass
+	elif velocity.y < -0.1 && Input.is_action_just_released("ui_accept"+str(controller_nb)):
+		velocity += Vector2.DOWN * cur_gravity * delta * jump_multiplier
+		pass
+
+
 	if Input.is_action_just_pressed("ui_accept"+str(controller_nb)):
 		if control_disabled:
 			return
@@ -146,6 +169,9 @@ func _physics_process(delta):
 			can_rotate = false
 			$JumpDirTimer.start()
 			velocity.y = jump_speed
+			
+	
+	velocity = move_and_slide(velocity, Vector2.UP)
 
 
 func _on_CoyoteTimer_timeout():

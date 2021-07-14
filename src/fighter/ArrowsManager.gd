@@ -54,4 +54,4 @@ func _process(delta):
 
 	for j in nb_players-i:
 		var arrow = get_child((nb_players-1)-j)
-		arrow.visible = a_visible
+		arrow.visible = false

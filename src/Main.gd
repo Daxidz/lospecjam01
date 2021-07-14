@@ -101,6 +101,7 @@ func _ready():
 	
 
 func _process(delta):
+#	$RibbonPhysic.position = get_global_mouse_position()
 	$FPS.text = str(Engine.get_frames_per_second())
 	for p in $Platforms.get_children():
 		if p.position.y >= $StartPlatform.position.y:
@@ -119,10 +120,10 @@ func _input(event):
 		$Fighters.get_child(cur_fighter).control_disabled = false
 		
 	if event is InputEventMouseButton and event.is_pressed():
-		spawn_splatter(event.position, Color.red)
-#		var b = Box.instance()
-#		b.position = event.position
-#		$Boxes.add_child(b)
+#		spawn_splatter(event.position, Color.red)
+		var b = Box.instance()
+		b.position = event.position
+		$Boxes.add_child(b)
 		pass
 
 func fight_end(player):
@@ -145,15 +146,18 @@ func onPunched(player):
 	$SFX.position = player.position
 	$SFX.set_stream(HitSound)
 	$SFX.pitch_scale = rand_range(0.8, 1.1)
-#	$SFX.play()
+	spawn_splatter(player.position, player.color, Vector2(0.2, 0.2),Vector2(0.5, 0.5))
+	$SFX.play()
 	
 	
-func spawn_splatter(position: Vector2, color: Color):
+func spawn_splatter(_position: Vector2, _color: Color, _scale_big: Vector2 = Vector2(1.0, 1.0), _scale_small: Vector2 = Vector2(1.0, 1.0)):
 	var s = Splater.instance()
-	s.position = position
-	s.color = color
+	s.position = _position
+	s.color = _color
 	s.position.x = clamp(s.position.x, 0, viewport_size.x)
 	s.position.y = clamp(s.position.y, 0, viewport_size.y)
+	s.get_node("Particles2D").scale = _scale_big
+	s.get_node("SmallSplatters").scale = _scale_small
 	$Splatters.add_child(s)
 	
 	
@@ -164,6 +168,7 @@ func onDead(player):
 	if nb_dead == nb_players-1:
 		for f in $Fighters.get_children():
 			if f != player:
+				f.paused = true
 				fight_end(f)
 
 

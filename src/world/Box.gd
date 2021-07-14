@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
 
-var gravity: int = 400
+var gravity: int = 500
 
 var velocity: Vector2
-var hit_power: int = 80
+var hit_power: int = 60
 
-var friction: float = 0.2
+var friction: float = 0.1
 
 func get_punched(enemy_pos, knockback_power):
 	var punch_vec = position-enemy_pos
@@ -15,9 +15,10 @@ func get_punched(enemy_pos, knockback_power):
 #		velocity.x -= knocback_speed
 #	else:
 #		velocity.x = knocback_speed
-	var y_rand = rand_range(-20, -10)
+	var y_rand = rand_range(-15, -10)
 	velocity = punch_vec * knockback_power
-	velocity.y += y_rand * punch_vec.length()
+	velocity.y += y_rand * punch_vec.length()*0.8
+	
 	$Particles2D.emitting = true
 
 

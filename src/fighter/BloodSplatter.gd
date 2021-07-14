@@ -4,6 +4,8 @@ var color: Color
 
 func splater():
 	material.set_shader_param("replace_col", color)
+	$Particles2D.process_material.color = color
+	$SmallSplatters.process_material.color = color
 	$Particles2D.emitting = true
 	$Particles2D.speed_scale = 1.6
 	$SmallSplatters.speed_scale = 1.6

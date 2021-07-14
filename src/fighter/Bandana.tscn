@@ -3,7 +3,7 @@
 [ext_resource path="res://src/fighter/Bandana.gd" type="Script" id=1]
 
 [node name="Bandana" type="Line2D"]
-points = PoolVector2Array( 0, 0, -6, 0, -10, 0, -13, 0, -15, 0 )
+points = PoolVector2Array( 0, 0, -6, 2.99945, -10, 2.92821, -13, 2.74024, -15, 2.44303 )
 width = 1.5
 script = ExtResource( 1 )
 freq = 2.0
