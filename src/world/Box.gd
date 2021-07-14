@@ -15,8 +15,9 @@ func get_punched(enemy_pos, knockback_power):
 #		velocity.x -= knocback_speed
 #	else:
 #		velocity.x = knocback_speed
-	var y_rand = rand_range(-15, -10)
-	velocity = punch_vec * knockback_power
+	var y_rand = rand_range(-10, -5)
+	velocity = punch_vec * knockback_power *0.3
+	
 	velocity.y += y_rand * punch_vec.length()*0.8
 	
 	$Particles2D.emitting = true
@@ -25,7 +26,8 @@ func get_punched(enemy_pos, knockback_power):
 func _physics_process(delta):
 	velocity.y += gravity * delta
 	
-	velocity.x = lerp(velocity.x, 0, friction)
+	if is_on_floor():
+		velocity.x = lerp(velocity.x, 0, friction)
 	velocity = move_and_slide(velocity, Vector2.UP)
 	
 	

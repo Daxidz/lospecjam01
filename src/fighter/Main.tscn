@@ -34,6 +34,7 @@ zoom_time = 0.3
 [node name="Tween" type="Tween" parent="Camera2D"]
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
+enabled = true
 
 [node name="BG" type="Sprite" parent="."]
 material = SubResource( 1 )
