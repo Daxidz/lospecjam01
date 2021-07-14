@@ -35,7 +35,7 @@ script = ExtResource( 2 )
 texture = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( 4, -5, 4, -4, 5, -4, 5, 4, 4, 4, 4, 5, -4, 5, -4, 4, -5, 4, -5, -4, -4, -4, -4, -5 )
+polygon = PoolVector2Array( 3, -5, 4, -4, 5, -3, 5, 3, 4, 4, 3, 5, -3, 5, -4, 4, -5, 3, -5, -3, -4, -4, -3, -5 )
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_layer = 2

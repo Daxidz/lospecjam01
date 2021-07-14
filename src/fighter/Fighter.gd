@@ -114,17 +114,20 @@ func _input(event):
 			punch()
 
 func _process(delta):
+	var cur_anim: String = "idle"
 	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y +ko_margin or position.x < -ko_margin:
 		emit_signal("dead", self)
 	
-	if is_on_floor():
-		if abs(velocity.x) >0.2:
-			
-			print("running")
-			state_machine.travel("run")
+	if not is_knockbacked:
+		if is_on_floor() and abs(velocity.x) >0.2:
+			cur_anim = "run"
 		else:
-			print("idling")
-			state_machine.travel("idle")
+			cur_anim = "idle"
+	else:
+		cur_anim = "knockback"
+		
+	if $AnimationPlayer.current_animation != cur_anim:
+		state_machine.travel(cur_anim)
 		
 func _physics_process(delta):
 	get_input()

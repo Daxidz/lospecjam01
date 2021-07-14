@@ -254,7 +254,6 @@ material = SubResource( 2 )
 z_index = 1
 texture = ExtResource( 1 )
 hframes = 15
-frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )
@@ -319,7 +318,7 @@ texture = ExtResource( 5 )
 [node name="Bandana" parent="." instance=ExtResource( 7 )]
 visible = false
 position = Vector2( 0, -4 )
-points = PoolVector2Array( 0, 0, -3, -1.82222, -4, -2.25184, -5, -2.59169, -6, -2.82821 )
+points = PoolVector2Array( 0, 0, -3, -0.0829033, -4, -0.351046, -5, -0.605197, -6, -0.835214 )
 displacement = 2.0
 freq = 1.0
 
