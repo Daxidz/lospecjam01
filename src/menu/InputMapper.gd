@@ -15,26 +15,26 @@ var disabled: bool = true
 
 var profile0 = {
 	"ui_left0": KEY_A,
-	"ui_right0": KEY_D,
+	"ui_right0": KEY_F,
 	"ui_start0": KEY_1,
-	"ui_accept0": KEY_SPACE,
-	"ui_select0": KEY_V,
+	"ui_accept0": KEY_Y,
+	"ui_select0": KEY_D,
 }
 
 var profile1 = {
-	"ui_left1": KEY_B,
-	"ui_right1": KEY_BACK,
+	"ui_left1": KEY_LEFT,
+	"ui_right1": KEY_RIGHT,
 	"ui_start1": KEY_M,
-	"ui_accept1": KEY_P,
-	"ui_select1": KEY_7,
+	"ui_accept1": KEY_KP_0,
+	"ui_select1": KEY_KP_PERIOD,
 }
 
 var profile2 = {
-	"ui_left2": KEY_J,
-	"ui_right2": KEY_L,
-	"ui_start2": KEY_O,
-	"ui_accept2": KEY_I,
-	"ui_select2": KEY_K,
+	"ui_left2": KEY_KP_4,
+	"ui_right2": KEY_KP_6,
+	"ui_start2": KEY_I,
+	"ui_accept2": KEY_KP_8,
+	"ui_select2": KEY_QUOTELEFT,
 }
 
 var profile3 = {

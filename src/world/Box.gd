@@ -4,7 +4,7 @@ extends KinematicBody2D
 var gravity: int = 500
 
 var velocity: Vector2
-var hit_power: int = 60
+var hit_power: int = 50
 
 var friction: float = 0.1
 

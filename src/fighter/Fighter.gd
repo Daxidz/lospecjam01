@@ -115,10 +115,17 @@ func get_input():
 func punch():
 	state_machine.travel("attack")
 	
+var start_t: float = 0.0
+var end_t: float = 0.0
+	
 func _input(event):
+	if event.is_action_released("ui_select"+str(controller_nb)):
+			end_t = OS.get_ticks_msec()
+			print(end_t-start_t)
 	if event.is_action_pressed("ui_select"+str(controller_nb)):
 		if (!control_disabled):
 			punch()
+			start_t = OS.get_ticks_msec()
 
 func _process(delta):
 	if paused:

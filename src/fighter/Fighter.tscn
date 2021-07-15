@@ -20,7 +20,6 @@ extents = Vector2( 2, 6 )
 
 [sub_resource type="Animation" id=4]
 length = 0.25
-loop = true
 step = 0.02
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -147,7 +146,7 @@ graph_offset = Vector2( -407.261, -132.862 )
 [sub_resource type="AnimationNodeStateMachinePlayback" id=22]
 
 [sub_resource type="RectangleShape2D" id=23]
-extents = Vector2( 9.54864, 8.42047 )
+extents = Vector2( 8, 9 )
 
 [sub_resource type="RectangleShape2D" id=24]
 extents = Vector2( 3, 7 )
@@ -245,7 +244,7 @@ color = Color( 0.701961, 0.705882, 0.105882, 1 )
 ko_margin = 30.0
 base_friction = 0.8
 knockback_friction = 0.05
-base_acceleration = 0.4
+base_acceleration = 0.3
 knockback_time = 0.6
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -279,9 +278,8 @@ collision_layer = 4
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2( 10.3695, -2.14604 )
+position = Vector2( 11, -4 )
 shape = SubResource( 23 )
-disabled = true
 
 [node name="Hurbox" type="Area2D" parent="."]
 collision_layer = 2
@@ -321,7 +319,7 @@ amount = 3
 node_lenght = 3
 
 [node name="JumpDirTimer" type="Timer" parent="."]
-wait_time = 0.4
+wait_time = 0.25
 one_shot = true
 
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_CoyoteTimer_timeout"]

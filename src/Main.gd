@@ -133,10 +133,10 @@ func _input(event):
 			enable_pause(false)
 			$InputMapper.close()
 			
-	if event.is_action_pressed("change_player"):
-		$Fighters.get_child(cur_fighter).control_disabled = true
-		cur_fighter = (cur_fighter +1) % $Fighters.get_child_count()
-		$Fighters.get_child(cur_fighter).control_disabled = false
+#	if event.is_action_pressed("change_player"):
+#		$Fighters.get_child(cur_fighter).control_disabled = true
+#		cur_fighter = (cur_fighter +1) % $Fighters.get_child_count()
+#		$Fighters.get_child(cur_fighter).control_disabled = false
 		
 	if event is InputEventMouseButton and event.is_pressed():
 #		spawn_splatter(event.position, Color.red)
