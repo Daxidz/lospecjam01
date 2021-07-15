@@ -84,6 +84,8 @@ pitch_scale = 0.77
 [node name="Comentator" parent="." instance=ExtResource( 5 )]
 position = Vector2( 0, 91 )
 
+[node name="Music" type="AudioStreamPlayer" parent="."]
+
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]

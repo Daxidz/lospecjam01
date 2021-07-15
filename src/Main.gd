@@ -6,6 +6,7 @@ const Box = preload("res://src/world/Box.tscn")
 const Splater = preload("res://BloodSplatter.tscn")
 
 const HitSound = preload("res://assets/sounds/hit.wav")
+const MainTheme = preload("res://assets/sounds/musics/main_theme.wav")
 
 export var pause_time: float = 0.02
 
@@ -96,6 +97,8 @@ func start_game():
 	
 
 func _ready():
+	$Music.stream = MainTheme
+	#$Music.play()
 	viewport_size = get_viewport_rect().size
 	start_game()
 	
