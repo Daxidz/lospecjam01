@@ -10,6 +10,10 @@ const selection_color: Color = Color(0xeae1f0ff)
 
 var cur_color: Color
 
+enum STATE {NONE, FOCUS, SELECTED}
+
+var state = 0
+
 func _ready():
 	cur_color = focused_color
 	if texture != null:
@@ -18,19 +22,23 @@ func _ready():
 func update_key(scancode):
 	$Label.text = OS.get_scancode_string(scancode)
 
-func draw_focus():
-	var r: Rect2
-	
-	r.size = rect_size
-	r.size.x *= 0.6
-	r.size.y *= 1.1
-	r.position.x += 45
-	r.position.y -= 1
-	draw_rect(r, cur_color, false)
 	
 
 func _draw():
-	if has_focus():
-		draw_focus()
+	if state == STATE.NONE:
+		cur_color = Color(0,0,0,0)
+	elif state == STATE.FOCUS:
+		cur_color = focused_color
+	elif state == STATE.SELECTED:
+		cur_color = selection_color
+		
+	var r: Rect2
+	
+	r.size = rect_size
+	r.size.x *= 0.7
+	r.size.y *= 1.1
+	r.position.x += 37
+	r.position.y -= 1
+	draw_rect(r, cur_color, false)
 		
 	

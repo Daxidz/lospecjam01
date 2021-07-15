@@ -104,11 +104,19 @@ func _ready():
 	
 
 func _process(delta):
-#	$RibbonPhysic.position = get_global_mouse_position()
-	$FPS.text = str(Engine.get_frames_per_second())
 	for p in $Platforms.get_children():
 		if p.position.y >= $StartPlatform.position.y:
 			p.queue_free()
+
+func enable_pause(enabled: bool):
+	if enabled:
+		get_tree().paused = true
+		$Fighters.visible = false
+		$Comentator.visible = false
+	else:
+		get_tree().paused = false
+		$Fighters.visible = true
+		$Comentator.visible = true
 
 func _input(event):
 	if event.is_action_pressed("ui_accept1") and not fight_running:
@@ -116,6 +124,14 @@ func _input(event):
 	
 	if event.is_action_pressed("ui_cancel"):
 		start_game()
+		
+	if event.is_action_pressed("ui_start0"):
+		if $InputMapper.disabled:
+			enable_pause(true)
+			$InputMapper.open()
+		else:
+			enable_pause(false)
+			$InputMapper.close()
 			
 	if event.is_action_pressed("change_player"):
 		$Fighters.get_child(cur_fighter).control_disabled = true

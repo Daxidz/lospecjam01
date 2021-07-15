@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/world/PlatformSpawner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Main.gd" type="Script" id=3]
 [ext_resource path="res://assets/img/world/bg.png" type="Texture" id=4]
 [ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/menu/InputMapper.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/world/CameraShake.gd" type="Script" id=8]
 [ext_resource path="res://src/fighter/move.shader" type="Shader" id=9]
 [ext_resource path="res://src/fighter/ArrowsManager.gd" type="Script" id=12]
@@ -16,6 +17,7 @@ shader_param/speed_scale = 0.3
 shader_param/speed_factor = 1.0
 
 [node name="Main" type="Node2D"]
+pause_mode = 2
 position = Vector2( 1, 0 )
 script = ExtResource( 3 )
 pause_time = 0.08
@@ -34,14 +36,17 @@ zoom_time = 0.3
 [node name="Tween" type="Tween" parent="Camera2D"]
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
+pause_mode = 1
 enabled = true
 
 [node name="BG" type="Sprite" parent="."]
+pause_mode = 1
 material = SubResource( 1 )
 position = Vector2( 119, 68 )
 texture = ExtResource( 4 )
 
 [node name="Platforms" type="Node2D" parent="."]
+pause_mode = 1
 
 [node name="StartPlatform" parent="." instance=ExtResource( 2 )]
 position = Vector2( 136, 118 )
@@ -56,20 +61,14 @@ one_shot = true
 script = ExtResource( 12 )
 
 [node name="Boxes" type="Node2D" parent="."]
+pause_mode = 1
 
 [node name="Fighters" type="Node2D" parent="."]
+pause_mode = 1
 
 [node name="PlatformTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
-
-[node name="FPS" type="Label" parent="."]
-visible = false
-margin_right = 40.0
-margin_bottom = 14.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 3.0
@@ -85,6 +84,11 @@ pitch_scale = 0.77
 position = Vector2( 0, 91 )
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
+
+[node name="InputMapper" parent="." instance=ExtResource( 6 )]
+visible = false
+margin_right = 240.0
+margin_bottom = 135.0
 
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]
