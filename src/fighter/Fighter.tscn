@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://assets/img/fighter/fighter.png" type="Texture" id=1]
 [ext_resource path="res://src/fighter/Fighter.gd" type="Script" id=2]
@@ -235,6 +235,9 @@ scale = 1.2
 scale_random = 0.29
 scale_curve = SubResource( 37 )
 
+[sub_resource type="RectangleShape2D" id=39]
+extents = Vector2( 3, 8 )
+
 [node name="Fighter" type="KinematicBody2D"]
 material = SubResource( 1 )
 collision_mask = 0
@@ -244,7 +247,7 @@ color = Color( 0.701961, 0.705882, 0.105882, 1 )
 ko_margin = 30.0
 base_friction = 0.8
 knockback_friction = 0.05
-base_acceleration = 0.3
+base_acceleration = 0.2
 knockback_time = 0.6
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -255,6 +258,7 @@ hframes = 15
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, 2 )
 shape = SubResource( 3 )
 
@@ -274,6 +278,7 @@ active = true
 parameters/playback = SubResource( 22 )
 
 [node name="Hitbox" type="Area2D" parent="."]
+visible = false
 collision_layer = 4
 collision_mask = 2
 
@@ -282,6 +287,7 @@ position = Vector2( 11, -4 )
 shape = SubResource( 23 )
 
 [node name="Hurbox" type="Area2D" parent="."]
+visible = false
 collision_layer = 2
 collision_mask = 4
 
@@ -322,7 +328,14 @@ node_lenght = 3
 wait_time = 0.25
 one_shot = true
 
+[node name="PassTrough" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PassTrough"]
+shape = SubResource( 39 )
+
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_CoyoteTimer_timeout"]
 [connection signal="area_entered" from="Hitbox" to="." method="_on_Hitbox_area_entered"]
 [connection signal="timeout" from="KnockbackTimer" to="." method="_on_KnockbackTimer_timeout"]
 [connection signal="timeout" from="Sprite2/Timer" to="Sprite2" method="_on_Timer_timeout"]
+[connection signal="body_exited" from="PassTrough" to="." method="_on_PassTrough_body_exited"]

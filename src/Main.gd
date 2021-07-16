@@ -166,7 +166,7 @@ func onPunched(player):
 	$SFX.set_stream(HitSound)
 	$SFX.pitch_scale = rand_range(0.8, 1.1)
 	spawn_splatter(player.position, player.color, Vector2(0.2, 0.2),Vector2(0.5, 0.5))
-	$SFX.play()
+	#$SFX.play()
 	
 	
 func spawn_splatter(_position: Vector2, _color: Color, _scale_big: Vector2 = Vector2(1.0, 1.0), _scale_small: Vector2 = Vector2(1.0, 1.0)):

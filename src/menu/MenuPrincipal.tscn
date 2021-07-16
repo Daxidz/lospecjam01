@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/menu/PanneauPlay.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/img/world/bg.png" type="Texture" id=2]
+[ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/fighter/Fighter.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/world/Box.tscn" type="PackedScene" id=5]
+
+[node name="MenuPrincipal" type="Node2D"]
+
+[node name="BG" type="Sprite" parent="."]
+position = Vector2( 123, 71 )
+texture = ExtResource( 2 )
+
+[node name="Box2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 230, 35 )
+
+[node name="Box" parent="." instance=ExtResource( 5 )]
+position = Vector2( 31, 89 )
+
+[node name="Fighter" parent="." instance=ExtResource( 4 )]
+position = Vector2( 108, 77 )
+controller_nb = 0
+
+[node name="Platform" parent="." instance=ExtResource( 3 )]
+position = Vector2( 121, 123 )
+scale = Vector2( 10, 1 )
+
+[node name="Platform3" parent="." instance=ExtResource( 3 )]
+position = Vector2( 209, 57 )
+scale = Vector2( 2, 1 )
+
+[node name="Platform2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 32, 86 )
+scale = Vector2( 2, 1 )
+
+[node name="Panneau2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 178, 121 )
+
+[node name="Panneau3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 208, 55 )
+
+[node name="Panneau" parent="." instance=ExtResource( 1 )]
+position = Vector2( 23, 84 )

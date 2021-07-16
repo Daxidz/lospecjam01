@@ -38,7 +38,7 @@ var jump_multiplier: float = 8
 
 var fall_multiplier: float = 0.0
 
-var controller_nb: int = -1 # assigned to a controller
+export var controller_nb: int = -1 # assigned to a controller
 
 
 # STATE
@@ -79,6 +79,40 @@ func scale_x_children(new_scale: int):
 	
 	$RibbonPhysic.position.x = -1 if new_scale == 1 else 1
 	
+
+		
+		
+func punch():
+	state_machine.travel("attack")
+	
+var start_t: float = 0.0
+var end_t: float = 0.0
+	
+func _input(event):
+	if event.is_action_pressed("ui_select"+str(controller_nb)):
+		if (!control_disabled):
+			punch()
+
+func _process(delta):
+	if paused:
+		return
+	var cur_anim: String = "idle"
+	
+	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y +ko_margin or position.x < -ko_margin:
+		emit_signal("dead", self)
+	
+	if not is_knockbacked:
+		if is_on_floor() and abs(velocity.x) >0.2:
+			cur_anim = "run"
+		else:
+			cur_anim = "idle"
+	else:
+		cur_anim = "knockback"
+		
+	if $AnimationPlayer.current_animation != cur_anim:
+		state_machine.travel(cur_anim)
+	
+	
 func get_input():
 		
 	var cur_speed = speed
@@ -108,43 +142,11 @@ func get_input():
 	else:
 		if is_knockbacked:
 			friction = knockback_friction
-		velocity.x = lerp(velocity.x, 0, friction)
-		
-		
-		
-func punch():
-	state_machine.travel("attack")
-	
-var start_t: float = 0.0
-var end_t: float = 0.0
-	
-func _input(event):
-	if event.is_action_released("ui_select"+str(controller_nb)):
-			end_t = OS.get_ticks_msec()
-			print(end_t-start_t)
-	if event.is_action_pressed("ui_select"+str(controller_nb)):
-		if (!control_disabled):
-			punch()
-			start_t = OS.get_ticks_msec()
-
-func _process(delta):
-	if paused:
-		return
-	var cur_anim: String = "idle"
-	
-	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y +ko_margin or position.x < -ko_margin:
-		emit_signal("dead", self)
-	
-	if not is_knockbacked:
-		if is_on_floor() and abs(velocity.x) >0.2:
-			cur_anim = "run"
+		if velocity.x > 1 or velocity.x < -1:
+			velocity.x = lerp(velocity.x, 0, friction)
 		else:
-			cur_anim = "idle"
-	else:
-		cur_anim = "knockback"
-		
-	if $AnimationPlayer.current_animation != cur_anim:
-		state_machine.travel(cur_anim)
+			velocity.x = 0
+			
 		
 func _physics_process(delta):
 	
@@ -158,16 +160,15 @@ func _physics_process(delta):
 		$CoyoteTimer.start(coyote_time)
 	elif is_on_floor():
 		can_jump = true
+		if Input.is_action_pressed("ui_down"+str(controller_nb)):
+			if get_collision_layer_bit(0):
+				set_collision_layer_bit(0, false)
+				velocity += Vector2.DOWN * cur_gravity * delta
 		
-#
 	# jump/fall mutliplier
-	if velocity.y > 0.1:
-#		velocity += Vector2.DOWN * cur_gravity * delta * fall_multiplier
-		pass
-	elif velocity.y < -0.1 && Input.is_action_just_released("ui_accept"+str(controller_nb)):
+	if velocity.y < -0.1 && Input.is_action_just_released("ui_accept"+str(controller_nb)):
 		velocity += Vector2.DOWN * cur_gravity * delta * jump_multiplier
 		pass
-
 
 	if Input.is_action_just_pressed("ui_accept"+str(controller_nb)):
 		if control_disabled:
@@ -199,3 +200,12 @@ func _on_KnockbackTimer_timeout():
 
 func _on_JumpDirTimer_timeout():
 	can_rotate = true
+
+
+func _on_PassTrough_body_exited(body: PhysicsBody2D):
+	print(body.get_path())
+	if body == self:
+		return
+	print("BACK TO PHYSICS BITCH")
+	if not get_collision_layer_bit(0):
+		set_collision_layer_bit(0, true)

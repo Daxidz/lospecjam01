@@ -9,6 +9,8 @@ _data = [ Vector2( 0.0208333, 0.981818 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.0181818 
 script = ExtResource( 2 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
 
 [node name="Line2D" type="Line2D" parent="."]
 width = 2.0

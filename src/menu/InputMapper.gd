@@ -15,10 +15,11 @@ var disabled: bool = true
 
 var profile0 = {
 	"ui_left0": KEY_A,
-	"ui_right0": KEY_F,
+	"ui_right0": KEY_D,
 	"ui_start0": KEY_1,
-	"ui_accept0": KEY_Y,
-	"ui_select0": KEY_D,
+	"ui_accept0": KEY_SPACE,
+	"ui_select0": KEY_V,
+	"ui_down0": KEY_S
 }
 
 var profile1 = {
