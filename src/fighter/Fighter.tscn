@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://assets/img/fighter/fighter.png" type="Texture" id=1]
 [ext_resource path="res://src/fighter/Fighter.gd" type="Script" id=2]
@@ -19,7 +19,7 @@ shader_param/color = Color( 0.964706, 0.247059, 0.298039, 1 )
 extents = Vector2( 2, 6 )
 
 [sub_resource type="Animation" id=4]
-length = 0.25
+length = 0.16
 step = 0.02
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -28,10 +28,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.02, 0.04, 0.06, 0.1, 0.16, 0.22 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.04, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
-"values": [ 2, 3, 4, 5, 6, 7, 8 ]
+"values": [ 6, 7, 8 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Hitbox/CollisionShape2D:disabled")
@@ -40,10 +40,67 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.1, 0.18 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.06 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ true, false, true ]
+"values": [ false, true ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.14 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_punch"
+} ]
+}
+
+[sub_resource type="Animation" id=40]
+resource_name = "attack_long"
+length = 0.16
+step = 0.02
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.04, 0.08 ),
+"transitions": PoolRealArray( 1, 2.2974, 1 ),
+"update": 1,
+"values": [ 20, 21, 22 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Hitbox/AttackLONG:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.06 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.14 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_punch"
+} ]
 }
 
 [sub_resource type="Animation" id=5]
@@ -78,6 +135,59 @@ tracks/0/keys = {
 "values": [ 9, 10 ]
 }
 
+[sub_resource type="Animation" id=41]
+resource_name = "max_charge"
+length = 0.16
+loop = true
+step = 0.02
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.08 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 18, 19 ]
+}
+
+[sub_resource type="Animation" id=42]
+resource_name = "prep_attack"
+length = 0.1
+step = 0.02
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.02, 0.04, 0.06 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 2, 3, 4, 5 ]
+}
+
+[sub_resource type="Animation" id=43]
+resource_name = "prepare_long"
+length = 0.4
+loop = true
+step = 0.02
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.14, 0.26 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 15, 16, 17 ]
+}
+
 [sub_resource type="Animation" id=7]
 resource_name = "run"
 length = 0.32
@@ -99,20 +209,26 @@ tracks/0/keys = {
 [sub_resource type="AnimationNodeAnimation" id=8]
 animation = "attack"
 
+[sub_resource type="AnimationNodeAnimation" id=44]
+animation = "attack_long"
+
 [sub_resource type="AnimationNodeAnimation" id=9]
 animation = "idle"
 
 [sub_resource type="AnimationNodeAnimation" id=10]
 animation = "knockback"
 
+[sub_resource type="AnimationNodeAnimation" id=45]
+animation = "max_charge"
+
+[sub_resource type="AnimationNodeAnimation" id=46]
+animation = "prep_attack"
+
+[sub_resource type="AnimationNodeAnimation" id=47]
+animation = "prepare_long"
+
 [sub_resource type="AnimationNodeAnimation" id=11]
 animation = "run"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=12]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=13]
-switch_mode = 2
-auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=14]
 
@@ -125,28 +241,68 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=19]
-
 [sub_resource type="AnimationNodeStateMachineTransition" id=20]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=48]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=50]
+switch_mode = 2
+priority = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=51]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=52]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=53]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=54]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=55]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=56]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=57]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=58]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=60]
 switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id=21]
 states/attack/node = SubResource( 8 )
-states/attack/position = Vector2( 441, 99 )
+states/attack/position = Vector2( 512, 188 )
+states/attack_long/node = SubResource( 44 )
+states/attack_long/position = Vector2( 654, -170.862 )
 states/idle/node = SubResource( 9 )
-states/idle/position = Vector2( 205, 68 )
+states/idle/position = Vector2( 521, -276 )
 states/knockback/node = SubResource( 10 )
-states/knockback/position = Vector2( 247, -90 )
+states/knockback/position = Vector2( 205, -270 )
+states/max_charge/node = SubResource( 45 )
+states/max_charge/position = Vector2( 668.739, -33.9544 )
+states/prep_attack/node = SubResource( 46 )
+states/prep_attack/position = Vector2( 177.739, 108.138 )
+states/prepare_long/node = SubResource( 47 )
+states/prepare_long/position = Vector2( 603.739, 51.0456 )
 states/run/node = SubResource( 11 )
-states/run/position = Vector2( 105, 194 )
-transitions = [ "idle", "attack", SubResource( 12 ), "attack", "idle", SubResource( 13 ), "idle", "knockback", SubResource( 14 ), "knockback", "idle", SubResource( 15 ), "attack", "knockback", SubResource( 16 ), "idle", "run", SubResource( 17 ), "run", "idle", SubResource( 18 ), "run", "attack", SubResource( 19 ), "attack", "run", SubResource( 20 ) ]
+states/run/position = Vector2( 2, 411 )
+transitions = [ "idle", "knockback", SubResource( 14 ), "knockback", "idle", SubResource( 15 ), "attack", "knockback", SubResource( 16 ), "idle", "run", SubResource( 17 ), "run", "idle", SubResource( 18 ), "attack", "run", SubResource( 20 ), "idle", "prep_attack", SubResource( 48 ), "prep_attack", "prepare_long", SubResource( 50 ), "prepare_long", "max_charge", SubResource( 51 ), "max_charge", "attack_long", SubResource( 52 ), "attack_long", "run", SubResource( 53 ), "run", "prep_attack", SubResource( 54 ), "attack_long", "idle", SubResource( 55 ), "attack", "idle", SubResource( 56 ), "prepare_long", "knockback", SubResource( 57 ), "max_charge", "knockback", SubResource( 58 ), "prep_attack", "attack", SubResource( 60 ) ]
 start_node = "idle"
-graph_offset = Vector2( -407.261, -132.862 )
+graph_offset = Vector2( -407.261, -4.61838 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=22]
 
 [sub_resource type="RectangleShape2D" id=23]
 extents = Vector2( 8, 9 )
+
+[sub_resource type="RectangleShape2D" id=59]
+extents = Vector2( 13, 11 )
 
 [sub_resource type="RectangleShape2D" id=24]
 extents = Vector2( 3, 7 )
@@ -242,7 +398,7 @@ extents = Vector2( 3, 8 )
 material = SubResource( 1 )
 collision_mask = 0
 script = ExtResource( 2 )
-hit_power = 30
+hit_power = 20
 color = Color( 0.701961, 0.705882, 0.105882, 1 )
 ko_margin = 30.0
 base_friction = 0.8
@@ -254,7 +410,7 @@ knockback_time = 0.6
 material = SubResource( 2 )
 z_index = 1
 texture = ExtResource( 1 )
-hframes = 15
+hframes = 23
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -267,8 +423,12 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack = SubResource( 4 )
+anims/attack_long = SubResource( 40 )
 anims/idle = SubResource( 5 )
 anims/knockback = SubResource( 6 )
+anims/max_charge = SubResource( 41 )
+anims/prep_attack = SubResource( 42 )
+anims/prepare_long = SubResource( 43 )
 anims/run = SubResource( 7 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -278,13 +438,18 @@ active = true
 parameters/playback = SubResource( 22 )
 
 [node name="Hitbox" type="Area2D" parent="."]
-visible = false
 collision_layer = 4
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2( 11, -4 )
 shape = SubResource( 23 )
+disabled = true
+
+[node name="AttackLONG" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2( 19, -8 )
+shape = SubResource( 59 )
+disabled = true
 
 [node name="Hurbox" type="Area2D" parent="."]
 visible = false
@@ -334,8 +499,15 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PassTrough"]
 shape = SubResource( 39 )
 
+[node name="LongPunchTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_CoyoteTimer_timeout"]
+[connection signal="animation_changed" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_changed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="area_entered" from="Hitbox" to="." method="_on_Hitbox_area_entered"]
 [connection signal="timeout" from="KnockbackTimer" to="." method="_on_KnockbackTimer_timeout"]
 [connection signal="timeout" from="Sprite2/Timer" to="Sprite2" method="_on_Timer_timeout"]
 [connection signal="body_exited" from="PassTrough" to="." method="_on_PassTrough_body_exited"]
+[connection signal="timeout" from="LongPunchTimer" to="." method="_on_LongPunchTimer_timeout"]

@@ -65,9 +65,11 @@ func get_punched(enemy_pos, knockback_power):
 	is_knockbacked = true
 	$KnockbackTimer.start(knockback_time)
 	$Particles2D.emitting = true
-	$Particles2D.scale + 0.5 * punch_vec.normalized()
+	$Particles2D.scale + 0.6 * punch_vec.normalized()
 	
 	state_machine.travel("knockback")
+	is_charging = false
+	is_punching = false
 	emit_signal("punched", self)
 	
 	
@@ -78,27 +80,18 @@ func scale_x_children(new_scale: int):
 			child.scale.x = new_scale
 	
 	$RibbonPhysic.position.x = -1 if new_scale == 1 else 1
+		
+		
 	
 
-		
-		
-func punch():
-	state_machine.travel("attack")
-	
-var start_t: float = 0.0
-var end_t: float = 0.0
-	
-func _input(event):
-	if event.is_action_pressed("ui_select"+str(controller_nb)):
-		if (!control_disabled):
-			punch()
 
 func _process(delta):
+	
 	if paused:
 		return
 	var cur_anim: String = "idle"
 	
-	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y +ko_margin or position.x < -ko_margin:
+	if position.x > get_viewport_rect().size.x + ko_margin or position.y > get_viewport_rect().size.y + ko_margin or position.x < - ko_margin:
 		emit_signal("dead", self)
 	
 	if not is_knockbacked:
@@ -109,9 +102,44 @@ func _process(delta):
 	else:
 		cur_anim = "knockback"
 		
-	if $AnimationPlayer.current_animation != cur_anim:
+	if $AnimationPlayer.current_animation != cur_anim and not (is_punching or is_long_punching):
 		state_machine.travel(cur_anim)
 	
+
+var is_punching: bool = false
+var is_charging: bool = false
+var is_long_punching: bool = false
+export var charge_time_s: int = 0.13
+var start_t: float = 0.0
+var end_t: float = 0.0
+func _input(event):
+	
+	if (control_disabled):
+		return
+		
+	if event.is_action_pressed("ui_select"+str(controller_nb)):
+		start_t = OS.get_ticks_usec()
+		print("PREPARE ATTACK")
+		$LongPunchTimer.start(charge_time_s)
+		is_punching = true
+		state_machine.travel("prep_attack")
+	if event.is_action_released("ui_select"+str(controller_nb)):
+		end_t = OS.get_ticks_usec()
+		print(str(end_t-start_t) + " us, " + str((end_t-start_t)/1000.0) + " s")
+		
+		start_t = 0
+		if $AnimationPlayer.current_animation == "max_charge":
+			state_machine.travel("attack_long")
+			is_long_punching = true
+			print("ATTACK LONG")
+			
+		else:
+			print("IDLE")
+			state_machine.travel("idle")
+		
+			
+
+
 	
 func get_input():
 		
@@ -119,7 +147,8 @@ func get_input():
 	var in_air = !is_on_floor();
 	var dir = 0
 	
-	can_rotate = $AnimationPlayer.current_animation != "attack" and $JumpDirTimer.is_stopped()
+	can_rotate =  not is_punching and $JumpDirTimer.is_stopped()
+#	can_rotate = $AnimationPlayer.current_animation != "attack" and not is_punching and $JumpDirTimer.is_stopped()
 	
 	friction = base_friction
 	
@@ -135,8 +164,10 @@ func get_input():
 	if dir != 0:
 		if in_air:
 			cur_speed *= 0.5
-		if is_knockbacked:
+		if is_knockbacked or is_punching or is_long_punching:
 			cur_speed *= 0.1
+		else:
+			cur_speed = speed
 			
 		velocity.x = lerp(velocity.x, dir * cur_speed, base_acceleration)
 	else:
@@ -177,7 +208,7 @@ func _physics_process(delta):
 			can_rotate = false
 			$JumpDirTimer.start()
 			velocity.y = jump_speed
-			
+		
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 
@@ -203,9 +234,36 @@ func _on_JumpDirTimer_timeout():
 
 
 func _on_PassTrough_body_exited(body: PhysicsBody2D):
-	print(body.get_path())
 	if body == self:
 		return
-	print("BACK TO PHYSICS BITCH")
 	if not get_collision_layer_bit(0):
 		set_collision_layer_bit(0, true)
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name == "attack" or anim_name == "attack_long":
+		is_punching = false
+
+func end_punch():
+	is_punching = false
+	
+func end_long_punch():
+	is_long_punching = false
+	
+func do_long_punch():
+		state_machine.travel("prepare_long")
+
+func _on_LongPunchTimer_timeout():
+		
+	if is_punching:
+		print("PREPARING LONG")
+		state_machine.travel("prepare_long")
+	else:
+		print("SHORT")
+		
+		is_punching = false
+		state_machine.travel("attack")
+
+
+func _on_AnimationPlayer_animation_changed(old_name, new_name):
+	print(old_name + " -> " + new_name)

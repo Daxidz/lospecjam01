@@ -21,7 +21,6 @@ pause_mode = 2
 position = Vector2( 1, 0 )
 script = ExtResource( 3 )
 pause_time = 0.08
-nb_players = 1
 inactive_time = 0.2
 
 [node name="Position2D" type="Position2D" parent="."]
@@ -38,6 +37,7 @@ zoom_time = 0.3
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
 pause_mode = 1
+enabled = true
 
 [node name="BG" type="Sprite" parent="."]
 pause_mode = 1
