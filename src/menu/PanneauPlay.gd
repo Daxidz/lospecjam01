@@ -4,6 +4,11 @@ var velocity: Vector2
 #var knockback_power: int = 50
 var hit_power: int = 80
 
+export var next_scene: String = ""
+var is_punched: bool = false
+
+export var time_to_next: float = 2.0
+
 func get_punched(enemy_pos, knockback_power):
 	var punch_vec: Vector2 = position-enemy_pos
 #	punch_vec = Vector2(1/(punch_vec.x+0.1), 1/(punch_vec.y+0.1))
@@ -20,7 +25,11 @@ func get_punched(enemy_pos, knockback_power):
 	$Panneau.apply_central_impulse(velocity)
 	$Panneau.apply_torque_impulse(0.5)
 	
-	print("PUUUUNCH")
+	if !is_punched:
+		is_punched = true
+		$NextSceneTimer.start(time_to_next)
+	
+	
 
 	
 func _process(delta):
@@ -29,3 +38,6 @@ func _process(delta):
 
 
 
+func _on_NextSceneTimer_timeout():
+	if next_scene != "":
+		SceneSwitcher.goto_scene(next_scene)

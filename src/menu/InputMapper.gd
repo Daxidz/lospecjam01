@@ -1,7 +1,7 @@
 extends Control
 
 const MAX_PLAYER = 4
-const NB_INPUT = 5
+const NB_INPUT = 7
 
 
 var cur_player: int = 0
@@ -14,41 +14,50 @@ const selection_color: Color = Color(0xeae1f0ff)
 var disabled: bool = true
 
 var profile0 = {
-	"ui_left0": KEY_A,
-	"ui_right0": KEY_D,
-	"ui_start0": KEY_1,
 	"ui_accept0": KEY_SPACE,
 	"ui_select0": KEY_V,
-	"ui_down0": KEY_S
+	"ui_left0": KEY_A,
+	"ui_right0": KEY_D,
+	"ui_up0": KEY_W,
+	"ui_down0": KEY_S,
+	"ui_start0": KEY_1,
 }
 
 var profile1 = {
-	"ui_left1": KEY_LEFT,
-	"ui_right1": KEY_RIGHT,
-	"ui_start1": KEY_M,
 	"ui_accept1": KEY_KP_0,
 	"ui_select1": KEY_KP_PERIOD,
+	"ui_left1": KEY_LEFT,
+	"ui_right1": KEY_RIGHT,
+	"ui_up1": KEY_W,
+	"ui_down1": KEY_S,
+	"ui_start1": KEY_M,
 }
 
 var profile2 = {
+	"ui_accept2": KEY_KP_1,
+	"ui_select2": KEY_KP_3,
 	"ui_left2": KEY_KP_4,
 	"ui_right2": KEY_KP_6,
+	"ui_up2": KEY_KP_8,
+	"ui_down2": KEY_S,
 	"ui_start2": KEY_I,
-	"ui_accept2": KEY_KP_8,
-	"ui_select2": KEY_QUOTELEFT,
 }
 
 var profile3 = {
-	"ui_left3": KEY_2,
-	"ui_right3": KEY_3,
-	"ui_start3": KEY_4,
 	"ui_accept3": KEY_5,
 	"ui_select3": KEY_6,
+	"ui_left3": KEY_2,
+	"ui_right3": KEY_3,
+	"ui_up3": KEY_T,
+	"ui_down3": KEY_Z,
+	"ui_start3": KEY_4,
 }
 
 var players_config = [profile0, profile1, profile2, profile3]
 
 func open():
+	cur_input = 0
+	cur_player = 0
 	visible = true
 	disabled = false
 	for l in $VBoxContainer/InputLines.get_children():

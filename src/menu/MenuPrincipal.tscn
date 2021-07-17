@@ -36,9 +36,11 @@ scale = Vector2( 2, 1 )
 
 [node name="Panneau2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 178, 121 )
+next_scene = "res://src/fighter/Main.tscn"
 
 [node name="Panneau3" parent="." instance=ExtResource( 1 )]
 position = Vector2( 208, 55 )
 
 [node name="Panneau" parent="." instance=ExtResource( 1 )]
 position = Vector2( 23, 84 )
+next_scene = "res://src/menu/InputMapper.tscn"
