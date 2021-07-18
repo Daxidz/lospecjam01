@@ -11,11 +11,11 @@ var cur_input: int = 0
 const focused_color: Color = Color(0x7e7185ff)
 const selection_color: Color = Color(0xeae1f0ff)
 
-var disabled: bool = true
+var disabled: bool = false
 
 var profile0 = {
-	"ui_accept0": KEY_SPACE,
-	"ui_select0": KEY_V,
+	"ui_jump0": KEY_SPACE,
+	"ui_punch0": KEY_V,
 	"ui_left0": KEY_A,
 	"ui_right0": KEY_D,
 	"ui_up0": KEY_W,
@@ -24,28 +24,28 @@ var profile0 = {
 }
 
 var profile1 = {
-	"ui_accept1": KEY_KP_0,
-	"ui_select1": KEY_KP_PERIOD,
+	"ui_jump1": KEY_UP,
+	"ui_punch1": KEY_I,
 	"ui_left1": KEY_LEFT,
 	"ui_right1": KEY_RIGHT,
-	"ui_up1": KEY_W,
-	"ui_down1": KEY_S,
+	"ui_up1": KEY_J,
+	"ui_down1": KEY_DOWN,
 	"ui_start1": KEY_M,
 }
 
 var profile2 = {
-	"ui_accept2": KEY_KP_1,
-	"ui_select2": KEY_KP_3,
+	"ui_jump2": KEY_KP_1,
+	"ui_punch2": KEY_KP_3,
 	"ui_left2": KEY_KP_4,
 	"ui_right2": KEY_KP_6,
 	"ui_up2": KEY_KP_8,
-	"ui_down2": KEY_S,
+	"ui_down2": KEY_U,
 	"ui_start2": KEY_I,
 }
 
 var profile3 = {
-	"ui_accept3": KEY_5,
-	"ui_select3": KEY_6,
+	"ui_jump3": KEY_5,
+	"ui_punch3": KEY_6,
 	"ui_left3": KEY_2,
 	"ui_right3": KEY_3,
 	"ui_up3": KEY_T,
@@ -56,27 +56,30 @@ var profile3 = {
 var players_config = [profile0, profile1, profile2, profile3]
 
 func open():
+	
 	cur_input = 0
 	cur_player = 0
 	visible = true
 	disabled = false
-	for l in $VBoxContainer/InputLines.get_children():
-		l.state = 0
 	select_profile(0)
 	
 	
 func close():
 	visible = false
 	disabled = true
+	
+	get_tree().paused = false
+	
 
 
 func change_action_key(action_name, key_scancode):
 	var profile = players_config[cur_player]
-	for k in players_config[cur_player].keys():
-		if k != action_name:
-			if profile[k] == key_scancode:
-				print("KEY ALREADY USED")
-				return false
+	for p in players_config:
+		for k in p.keys():
+			if k != action_name:
+				if p[k] == key_scancode:
+					$Comentator.new_text("DAAAAMN! THIS KEY IS \nALREADY ASSIGNED!")
+					return false
 	erase_action_events(action_name)
 	var new_event = InputEventKey.new()
 	new_event.set_scancode(key_scancode)
@@ -96,7 +99,9 @@ func erase_action_events(action_name):
 
 func select_profile(id: int):
 	# Color setup
-	var p = $VBoxContainer/PlayerSelect.get_child(id)	
+	var p = $VBoxContainer/PlayerSelect.get_child(id)
+	for p2 in $VBoxContainer/PlayerSelect.get_children():
+		p2.add_color_override("font_color", focused_color)
 	p.add_color_override("font_color", selection_color)
 	cur_input = 0
 	
@@ -104,10 +109,12 @@ func select_profile(id: int):
 	var profile = players_config[id]
 	var i = 0
 	for action_name in profile.keys():
-		change_action_key(action_name, profile[action_name])
+#		change_action_key(action_name, profile[action_name])
 		$VBoxContainer/InputLines.get_child(i).update_key(profile[action_name])
 		i += 1
-	$VBoxContainer/InputLines/A.state = 1
+	for l in $VBoxContainer/InputLines.get_children():
+		l.state = 0
+	$VBoxContainer/InputLines.get_child(0).state = 1
 	
 
 func load_all_profiles():
@@ -115,8 +122,12 @@ func load_all_profiles():
 		cur_player = i
 		var profile = players_config[i]
 		for action_name in profile.keys():
-			print(action_name + " " + str(profile[action_name]) )
-			change_action_key(action_name, profile[action_name])
+			erase_action_events(action_name)
+			var new_event = InputEventKey.new()
+			new_event.set_scancode(profile[action_name])
+			if !InputMap.has_action(action_name):
+				InputMap.add_action(action_name)
+			InputMap.action_add_event(action_name, new_event)
 	
 	cur_player = 0
 
@@ -124,9 +135,6 @@ func load_all_profiles():
 func _ready():
 	cur_input = 0
 	load_all_profiles()
-	
-	for p in $VBoxContainer/PlayerSelect.get_children():
-		p.add_color_override("font_color", focused_color)
 	select_profile(0)
 	
 	
@@ -134,6 +142,12 @@ func enable_line_focus(enable: bool):
 	for l in $VBoxContainer/InputLines.get_children():
 		l.set_focus_mode(FOCUS_ALL if enable else FOCUS_NONE)
 	
+func check_for_players_inputs(event):
+	for i in 3:
+		for k in players_config[i+1].keys():
+			if event.is_action_pressed(k):
+				$Comentator.new_text("STAY CALM PLEASE!\nONLY P1 CAN CHANGE\nSETTINGS!")
+			
 	
 func _input(event):
 	if disabled:
@@ -153,8 +167,9 @@ func _input(event):
 	if event.is_action_pressed("ui_right0"):
 		if cur_player < MAX_PLAYER -1:
 			cur_player += 1
+	check_for_players_inputs(event)
 			
-	if event.is_action_pressed("ui_accept0"):
+	if event.is_action_pressed("ui_jump0"):
 		var l = $VBoxContainer/InputLines.get_child(cur_input)
 		l.state = 2
 		l.update()
@@ -175,10 +190,11 @@ func _input(event):
 		
 		set_process_input(true)
 		l.state = 1
-		
-
 		l.update()
-			
+		
+	if event.is_action_pressed("ui_start0"):
+		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
+	
 	if p != cur_player:
 		print("cur player " + str(cur_player))
 		$VBoxContainer/PlayerSelect.get_child(p).add_color_override("font_color", focused_color)

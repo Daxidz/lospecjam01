@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://src/menu/InputLine.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/fonts/smashcat.tres" type="DynamicFont" id=2]
@@ -12,6 +12,246 @@
 [ext_resource path="res://assets/img/menu/A.png" type="Texture" id=10]
 [ext_resource path="res://assets/img/menu/DOWN.png" type="Texture" id=11]
 [ext_resource path="res://assets/img/menu/UP.png" type="Texture" id=12]
+[ext_resource path="res://assets/img/menu/bg_menu.png" type="Texture" id=13]
+[ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=14]
+
+[sub_resource type="Shader" id=1]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
+
+[sub_resource type="Shader" id=3]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
+shader = SubResource( 3 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
+
+[sub_resource type="Shader" id=5]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+resource_local_to_scene = true
+shader = SubResource( 5 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
+
+[sub_resource type="Shader" id=7]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+resource_local_to_scene = true
+shader = SubResource( 7 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
+
+[sub_resource type="Shader" id=9]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=10]
+resource_local_to_scene = true
+shader = SubResource( 9 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
+
+[sub_resource type="Shader" id=11]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = SubResource( 11 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
+
+[sub_resource type="Shader" id=13]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform vec4 target_col: hint_color;
+uniform vec4 replace_col: hint_color;
+uniform bool enabled;
+
+void fragment(){
+	if (!enabled) return;
+	vec4 cur_color = texture(TEXTURE, UV);
+	vec4 bg_col = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);
+	
+	vec4 d4 = abs(bg_col - target_col);
+    float d = max(max(d4.r, d4.g), d4.b);
+	
+    float dc = length(UV - 0.5);
+    float c = dc < 0.3 ? 1.0 : 0.0;
+	
+//	if ((d < 0.01) && (cur_color.a > 0.0) && c != 0.0) {
+	if ((d < 0.01) && (cur_color.a > 0.0)) {
+		COLOR = replace_col;
+	} else {
+		COLOR.a = 0.0
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=14]
+resource_local_to_scene = true
+shader = SubResource( 13 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+shader_param/enabled = false
 
 [node name="InputMapper" type="Control"]
 pause_mode = 2
@@ -24,19 +264,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
+[node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.113725, 0.109804, 0.121569, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+texture = ExtResource( 13 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 5.0
 custom_constants/separation = 9
 __meta__ = {
 "_edit_use_anchors_": false
@@ -44,7 +279,9 @@ __meta__ = {
 
 [node name="PlayerSelect" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 240.0
-margin_bottom = 5.0
+margin_bottom = 7.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 alignment = 1
 
 [node name="P1" type="Label" parent="VBoxContainer/PlayerSelect"]
@@ -93,14 +330,13 @@ __meta__ = {
 }
 
 [node name="Labels" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 7.0
+margin_top = 16.0
 margin_right = 240.0
-margin_bottom = 15.0
+margin_bottom = 22.0
 
 [node name="Action" type="Label" parent="VBoxContainer/Labels"]
-margin_top = 1.0
 margin_right = 118.0
-margin_bottom = 7.0
+margin_bottom = 6.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.917647, 0.882353, 0.941176, 1 )
@@ -110,9 +346,8 @@ uppercase = true
 
 [node name="Input" type="Label" parent="VBoxContainer/Labels"]
 margin_left = 122.0
-margin_top = 1.0
 margin_right = 240.0
-margin_bottom = 7.0
+margin_bottom = 6.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.917647, 0.882353, 0.941176, 1 )
@@ -121,45 +356,56 @@ align = 1
 uppercase = true
 
 [node name="InputLines" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 23.0
+margin_top = 31.0
 margin_right = 240.0
-margin_bottom = 131.0
+margin_bottom = 135.0
+size_flags_horizontal = 3
 script = ExtResource( 4 )
 
 [node name="A" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_bottom = 11.0
+material = SubResource( 2 )
+margin_bottom = 12.0
 focus_mode = 0
 texture = ExtResource( 10 )
 
 [node name="B" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_top = 15.0
-margin_bottom = 26.0
+material = SubResource( 4 )
+margin_top = 16.0
+margin_bottom = 28.0
 texture = ExtResource( 8 )
 
 [node name="LEFT" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_top = 30.0
-margin_bottom = 41.0
+material = SubResource( 6 )
+margin_top = 32.0
+margin_bottom = 44.0
 texture = ExtResource( 9 )
 
 [node name="RIGHT" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_top = 45.0
-margin_bottom = 56.0
+material = SubResource( 8 )
+margin_top = 48.0
+margin_bottom = 59.0
 texture = ExtResource( 5 )
 
 [node name="UP" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_top = 60.0
-margin_bottom = 71.0
+material = SubResource( 10 )
+margin_top = 63.0
+margin_bottom = 74.0
 texture = ExtResource( 12 )
 
 [node name="DOWN" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_top = 75.0
-margin_bottom = 86.0
+material = SubResource( 12 )
+margin_top = 78.0
+margin_bottom = 89.0
 texture = ExtResource( 11 )
 
 [node name="START" parent="VBoxContainer/InputLines" instance=ExtResource( 1 )]
-margin_top = 90.0
-margin_bottom = 101.0
+material = SubResource( 14 )
+margin_top = 93.0
+margin_bottom = 104.0
 texture = ExtResource( 7 )
 
 [node name="KeyMapper" type="Node" parent="."]
 script = ExtResource( 6 )
+
+[node name="Comentator" parent="." instance=ExtResource( 14 )]
+position = Vector2( 0, 100 )

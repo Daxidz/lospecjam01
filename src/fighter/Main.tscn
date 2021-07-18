@@ -1,14 +1,15 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/world/PlatformSpawner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Main.gd" type="Script" id=3]
-[ext_resource path="res://assets/img/world/bg.png" type="Texture" id=4]
 [ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/menu/InputMapper.tscn" type="PackedScene" id=6]
-[ext_resource path="res://src/world/CameraShake.gd" type="Script" id=8]
+[ext_resource path="res://src/world/ParallaxBackground.gd" type="Script" id=7]
+[ext_resource path="res://src/world/CameraShake.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/fighter/move.shader" type="Shader" id=9]
+[ext_resource path="res://assets/img/world/bg_bg.png" type="Texture" id=10]
 [ext_resource path="res://src/fighter/ArrowsManager.gd" type="Script" id=12]
+[ext_resource path="res://src/world/grafitis/GrafManager.gd" type="Script" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 9 )
@@ -26,30 +27,26 @@ inactive_time = 0.2
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 142, 51 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Node2D" type="Node2D" parent="."]
 position = Vector2( 120, 67.5 )
-current = true
-script = ExtResource( 8 )
-max_offset = Vector2( 7, 12 )
-zoom_time = 0.3
 
-[node name="Tween" type="Tween" parent="Camera2D"]
+[node name="Camera2D" parent="Node2D" instance=ExtResource( 8 )]
 
 [node name="PlatformSpawner" parent="." instance=ExtResource( 1 )]
 pause_mode = 1
+enabled = true
 
-[node name="BG" type="Sprite" parent="."]
+[node name="BG2" type="Node2D" parent="."]
+position = Vector2( 119, 68 )
+script = ExtResource( 13 )
+
+[node name="BG" type="Sprite" parent="BG2"]
 pause_mode = 1
 material = SubResource( 1 )
-position = Vector2( 119, 68 )
-texture = ExtResource( 4 )
+texture = ExtResource( 10 )
 
 [node name="Platforms" type="Node2D" parent="."]
 pause_mode = 1
-
-[node name="StartPlatform" parent="." instance=ExtResource( 2 )]
-position = Vector2( 136, 118 )
-scale = Vector2( 20, 1 )
 
 [node name="PauseTimer" type="Timer" parent="."]
 pause_mode = 2
@@ -84,9 +81,17 @@ position = Vector2( 0, 91 )
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 
-[node name="InputMapper" parent="." instance=ExtResource( 6 )]
-margin_right = 240.0
-margin_bottom = 135.0
+[node name="StartPlatform" parent="." instance=ExtResource( 2 )]
+position = Vector2( 136, 118 )
+scale = Vector2( 20, 1 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+script = ExtResource( 7 )
+camera_velocity = Vector2( 0, 40 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+visible = false
+motion_mirroring = Vector2( 0, 175 )
 
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]

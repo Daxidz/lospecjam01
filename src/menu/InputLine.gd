@@ -26,19 +26,25 @@ func update_key(scancode):
 
 func _draw():
 	if state == STATE.NONE:
+		material.set_shader_param("enabled", false)
+		material.set_shader_param("replace_col", focused_color)
 		cur_color = Color(0,0,0,0)
 	elif state == STATE.FOCUS:
+		material.set_shader_param("enabled", true)
+		material.set_shader_param("replace_col", focused_color)
 		cur_color = focused_color
 	elif state == STATE.SELECTED:
 		cur_color = selection_color
+		material.set_shader_param("enabled", true)
+		material.set_shader_param("replace_col", selection_color)
 		
 	var r: Rect2
 	
 	r.size = rect_size
-	r.size.x *= 0.7
-	r.size.y *= 1.1
-	r.position.x += 37
+	r.size.x *= 0.5
+	r.size.y *= 1.2
+	r.position.x += rect_size.x/4
 	r.position.y -= 1
-	draw_rect(r, cur_color, false)
+	draw_rect(r, cur_color, true)
 		
 	

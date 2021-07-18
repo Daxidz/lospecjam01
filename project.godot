@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="LospecJam01"
-run/main_scene="res://src/fighter/Main.tscn"
+run/main_scene="res://src/menu/MenuPrincipal.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -49,7 +49,7 @@ texture={
 "flags/anisotropic": false,
 "flags/filter": false,
 "flags/mipmaps": false,
-"flags/repeat": 0,
+"flags/repeat": 1,
 "flags/srgb": 2,
 "process/HDR_as_SRGB": false,
 "process/fix_alpha_border": true,

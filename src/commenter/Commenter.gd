@@ -2,6 +2,7 @@ extends Node2D
 
 var texts = ["NICE!", "BRAVO!", "IS HE ALIVE?!", "MAKE IT RAIIIN!"]
 
+
 var cur_text: int = 0
 var mut = Mutex.new()
 
@@ -20,6 +21,13 @@ func next_text():
 	$TextBox2.text = text
 	$TextBox2.start()
 	
+func new_text(new_text: String):
+	if !$TextBox2.closed:
+		return
+	var text = new_text
+	
+	$TextBox2.text = text
+	$TextBox2.start()
 
 func _on_ChangeTextTimer_timeout():
 	next_text()

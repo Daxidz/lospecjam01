@@ -33,7 +33,9 @@ func _on_Timer_timeout():
 			$EndTimer.start(1)
 
 	nb_visible += 1
-	
+
+var max_x_lenght: int = 30
+
 func start():
 	closed = false
 	
@@ -41,9 +43,13 @@ func start():
 	
 	text_lenght = text.length()
 	
-	$TextBox2.rect_size.x = text.length() * 6 + 5
+	var nb_linebreak = text.count("\n")
+	nb_linebreak += 1
+	
+#	$TextBox2.rect_size.x = max_x_lenght
 	$TextBox2.rect_size.y = 10
-	$Tween.interpolate_property($TextBox2, "rect_size", Vector2(0, $TextBox2.rect_size.y), Vector2(text.length() * 6 + 5, 10), 0.5, Tween.TRANS_BOUNCE)
+#	$Tween.interpolate_property($TextBox2, "rect_size", Vector2(0, $TextBox2.rect_size.y), Vector2(text.length() * 6 + 5, 10), 0.5, Tween.TRANS_BOUNCE)
+	$Tween.interpolate_property($TextBox2, "rect_size", Vector2(0, $TextBox2.rect_size.y), Vector2(7*text.length()/nb_linebreak+8, nb_linebreak *8 + 10), 0.5, Tween.TRANS_BOUNCE)
 	$Tween.start()
 	$TextBox2.rect_position = Vector2.ZERO
 	modulate = Color(1,1,1,1)

@@ -92,8 +92,8 @@ func start_game():
 	else:
 		enable_players(true)
 	nb_dead = 0
-	$Camera2D.target = null
-	$Camera2D.zoom_on(Vector2(1, 1))
+	camera.target = null
+	camera.zoom_on(Vector2(1, 1))
 	
 
 func _ready():
@@ -119,19 +119,20 @@ func enable_pause(enabled: bool):
 		$Comentator.visible = true
 
 func _input(event):
-	if event.is_action_pressed("ui_accept1") and not fight_running:
+	if event.is_action_pressed("ui_accept0") and not fight_running:
 		start_game()
 	
 	if event.is_action_pressed("ui_cancel"):
+		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
 		start_game()
 		
-	if event.is_action_pressed("ui_start0"):
-		if $InputMapper.disabled:
-			enable_pause(true)
-			$InputMapper.open()
-		else:
-			enable_pause(false)
-			$InputMapper.close()
+#	if event.is_action_pressed("ui_start0"):
+#		if $InputMapper.disabled:
+#			enable_pause(true)
+#			$InputMapper.open()
+#		else:
+#			enable_pause(false)
+#			$InputMapper.close()
 			
 #	if event.is_action_pressed("change_player"):
 #		$Fighters.get_child(cur_fighter).control_disabled = true
@@ -149,18 +150,19 @@ func fight_end(player):
 	fight_running = false
 	set_game_speed(0.4)
 	print(player.get_path())
-	$Camera2D.target = player.get_path()
-	$Camera2D.zoom_on(Vector2(0.5,0.5))
+	camera.target = player.get_path()
+	camera.zoom_on(Vector2(0.5,0.5))
 
 func game_end():
 	pass
 	
-	
+
+onready var camera = get_node("Node2D/Camera2D")
 func onPunched(player):
 	$PauseTimer.start(pause_time)
 #	get_tree().paused = true
-	$Camera2D.decay = 0.8
-	$Camera2D.add_trauma(0.6)
+	camera.decay = 0.8
+	camera.add_trauma(0.6)
 	$Comentator.next_text()
 	$SFX.position = player.position
 	$SFX.set_stream(HitSound)
