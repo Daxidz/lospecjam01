@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/menu/PanneauPlay.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/img/world/bg.png" type="Texture" id=2]
@@ -6,8 +6,11 @@
 [ext_resource path="res://src/fighter/Fighter.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/world/Box.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/img/menu/oanneau_inputs.png" type="Texture" id=6]
+[ext_resource path="res://assets/img/menu/panneau_play.png" type="Texture" id=7]
+[ext_resource path="res://src/menu/MenuPrincipal.gd" type="Script" id=8]
 
 [node name="MenuPrincipal" type="Node2D"]
+script = ExtResource( 8 )
 
 [node name="BG" type="Sprite" parent="."]
 position = Vector2( 123, 71 )
@@ -38,13 +41,14 @@ scale = Vector2( 2, 1 )
 
 [node name="PanneauPlay" parent="." instance=ExtResource( 1 )]
 position = Vector2( 178, 121 )
-next_scene = "res://src/fighter/Main.tscn"
+next_scene = "res://src/menu/ModeSelect.tscn"
+lenght = 10
+time_to_next = 1.0
+texture = ExtResource( 7 )
 
-[node name="PanneauInputs" parent="." instance=ExtResource( 1 )]
-position = Vector2( 23, 84 )
+[node name="PanneauInput" parent="." instance=ExtResource( 1 )]
+position = Vector2( 33, 84 )
 next_scene = "res://src/menu/InputMapper.tscn"
-
-[node name="Sprite" parent="PanneauInputs/Panneau" index="0"]
+lenght = 15
+time_to_next = 1.0
 texture = ExtResource( 6 )
-
-[editable path="PanneauInputs"]

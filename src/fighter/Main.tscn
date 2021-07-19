@@ -1,10 +1,9 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/world/PlatformSpawner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Main.gd" type="Script" id=3]
 [ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/world/ParallaxBackground.gd" type="Script" id=7]
 [ext_resource path="res://src/world/CameraShake.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/fighter/move.shader" type="Shader" id=9]
 [ext_resource path="res://assets/img/world/bg_bg.png" type="Texture" id=10]
@@ -73,25 +72,27 @@ one_shot = true
 [node name="Splatters" type="Node2D" parent="."]
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="."]
-volume_db = -7.068
-pitch_scale = 0.77
 
 [node name="Comentator" parent="." instance=ExtResource( 5 )]
 position = Vector2( 0, 91 )
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
 
 [node name="StartPlatform" parent="." instance=ExtResource( 2 )]
 position = Vector2( 136, 118 )
 scale = Vector2( 20, 1 )
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-script = ExtResource( 7 )
-camera_velocity = Vector2( 0, 40 )
-
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-visible = false
-motion_mirroring = Vector2( 0, 175 )
+[node name="LifesHBox" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+margin_top = 3.0
+margin_right = 239.0
+margin_bottom = 7.0
+size_flags_horizontal = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="timeout" from="PauseTimer" to="." method="_on_PauseTimer_timeout"]
 [connection signal="timeout" from="PlatformTimer" to="." method="_on_PlatformTimer_timeout"]

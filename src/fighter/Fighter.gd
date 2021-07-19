@@ -39,6 +39,7 @@ var jump_multiplier: float = 8
 var fall_multiplier: float = 0.0
 
 export var controller_nb: int = -1 # assigned to a controller
+var id: int = -1
 
 
 # STATE
@@ -89,7 +90,7 @@ var start_t: float = 0.0
 var end_t: float = 0.0
 	
 func _input(event):
-	if event.is_action_pressed("ui_select"+str(controller_nb)):
+	if event.is_action_pressed("ui_punch"+str(controller_nb)):
 		if (!control_disabled):
 			punch()
 
@@ -166,11 +167,11 @@ func _physics_process(delta):
 				velocity += Vector2.DOWN * cur_gravity * delta
 		
 	# jump/fall mutliplier
-	if velocity.y < -0.1 && Input.is_action_just_released("ui_accept"+str(controller_nb)):
+	if velocity.y < -0.1 && Input.is_action_just_released("ui_jump"+str(controller_nb)):
 		velocity += Vector2.DOWN * cur_gravity * delta * jump_multiplier
 		pass
 
-	if Input.is_action_just_pressed("ui_accept"+str(controller_nb)):
+	if Input.is_action_just_pressed("ui_jump"+str(controller_nb)):
 		if control_disabled:
 			return
 		if can_jump:

@@ -24,7 +24,6 @@ font_data = SubResource( 3 )
 [node name="Node2D" type="Node2D"]
 material = SubResource( 2 )
 script = ExtResource( 1 )
-text_speed = 0.08
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

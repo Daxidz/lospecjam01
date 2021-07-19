@@ -4,8 +4,10 @@ const Fighter = preload("res://src/fighter/Fighter.tscn")
 #const Box = preload("res://src/world/BoxRigid.tscn")
 const Box = preload("res://src/world/Box.tscn")
 const Splater = preload("res://BloodSplatter.tscn")
+const LifesBar = preload("res://src/menu/Lifes.tscn")
 
-const HitSound = preload("res://assets/sounds/hit.wav")
+#const HitSound = preload("res://assets/sounds/hit.wav")
+const HitSound = preload("res://assets/sounds/SFXO1.wav")
 const MainTheme = preload("res://assets/sounds/musics/main_theme.wav")
 
 export var pause_time: float = 0.02
@@ -18,11 +20,12 @@ var game_running: bool
 
 var fight_running: bool
 
-var lut_places = [0, 3, 1, 2]
+var lut_places = [0, 1, 2, 3]
 
 var lut_colors = [0xf63f4cff, 0x4159cbff, 0xfdbb27ff, 0x8d902eff]
 
 export var nb_players: int = 4
+export var nb_lifes: int = 6
 var nb_dead: int = 0
 
 export var use_platform: bool
@@ -47,6 +50,8 @@ func enable_players(enable : bool):
 func reset_fighters():
 	for f in $Fighters.get_children():
 		f.free()
+	for l in $LifesHBox.get_children():
+		l.queue_free()
 		
 	var tot_pos = get_viewport_rect().size
 	for i in nb_players:
@@ -55,8 +60,18 @@ func reset_fighters():
 		f.position.y = tot_pos.y/3
 		f.velocity = Vector2.ZERO
 		f.controller_nb = i
+		f.id = i
 		f.color = Color(lut_colors[i])
 		$Fighters.add_child(f)
+		
+		#Spawn life bars
+		var l = LifesBar.instance()
+		l.nb_life = GameOptions.nb_lifes
+		l.alignment = 1
+		l.color = Color(lut_colors[i])
+		$LifesHBox.add_child(l)
+		players_life[i] = GameOptions.nb_lifes
+
 		
 		
 func delete_boxes():
@@ -83,6 +98,7 @@ func start_game():
 		
 	set_game_speed(1)
 	
+	nb_players = GameOptions.nb_players
 	reset_fighters()
 	enable_players(false)
 	delete_boxes()
@@ -98,7 +114,7 @@ func start_game():
 
 func _ready():
 	$Music.stream = MainTheme
-	#$Music.play()
+	$Music.play()
 	viewport_size = get_viewport_rect().size
 	start_game()
 	
@@ -119,10 +135,10 @@ func enable_pause(enabled: bool):
 		$Comentator.visible = true
 
 func _input(event):
-	if event.is_action_pressed("ui_accept0") and not fight_running:
+	if event.is_action_pressed("ui_jump0") and not fight_running:
 		start_game()
 	
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_start0"):
 		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
 		start_game()
 		
@@ -158,20 +174,22 @@ func game_end():
 	
 
 onready var camera = get_node("Node2D/Camera2D")
+
 func onPunched(player):
 	$PauseTimer.start(pause_time)
 #	get_tree().paused = true
 	camera.decay = 0.8
-	camera.add_trauma(0.6)
+	camera.add_trauma(0.5)
 	$Comentator.next_text()
 	$SFX.position = player.position
 	$SFX.set_stream(HitSound)
 	$SFX.pitch_scale = rand_range(0.8, 1.1)
-	spawn_splatter(player.position, player.color, Vector2(0.2, 0.2),Vector2(0.5, 0.5))
-	#$SFX.play()
+	spawn_splatter(player.position, player.color, Vector2(0.1, 0.1),Vector2(0.4, 0.4), true)
+	
+	$SFX.play()
 	
 	
-func spawn_splatter(_position: Vector2, _color: Color, _scale_big: Vector2 = Vector2(1.0, 1.0), _scale_small: Vector2 = Vector2(1.0, 1.0)):
+func spawn_splatter(_position: Vector2, _color: Color, _scale_big: Vector2 = Vector2(1.0, 1.0), _scale_small: Vector2 = Vector2(1.0, 1.0), enabled: bool = false):
 	var s = Splater.instance()
 	s.position = _position
 	s.color = _color
@@ -179,18 +197,33 @@ func spawn_splatter(_position: Vector2, _color: Color, _scale_big: Vector2 = Vec
 	s.position.y = clamp(s.position.y, 0, viewport_size.y)
 	s.get_node("Particles2D").scale = _scale_big
 	s.get_node("SmallSplatters").scale = _scale_small
+	if enabled:
+		s.direction = Vector2(0,1)
+		s.speed = 0.2
 	$Splatters.add_child(s)
 	
+var players_life = [nb_lifes, nb_lifes, nb_lifes, nb_lifes]
 	
 func onDead(player):
-	spawn_splatter(player.position, player.color)
-	player.queue_free()
-	nb_dead+=1
-	if nb_dead == nb_players-1:
-		for f in $Fighters.get_children():
-			if f != player:
-				f.paused = true
-				fight_end(f)
+	$LifesHBox.get_child(player.id).lose_life()
+	players_life[player.id] -= 1
+	if players_life[player.id] == 0:
+		spawn_splatter(player.position, player.color)
+		player.queue_free()
+		nb_dead+=1
+		if nb_dead == nb_players-1:
+			for f in $Fighters.get_children():
+				if f != player:
+					f.paused = true
+					fight_end(f)
+	elif players_life[player.id] < 0:
+		return
+	else: 
+		var tot_pos = get_viewport_rect().size
+		spawn_splatter(player.position, player.color, Vector2(0.6, 0.6))
+		player.position.x = (tot_pos.x/5) * (lut_places[player.id] +1)
+		player.position.y = tot_pos.y/3
+		player.velocity = Vector2.ZERO
 
 
 func _on_PauseTimer_timeout():
