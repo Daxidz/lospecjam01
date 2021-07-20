@@ -38,7 +38,7 @@ var jump_multiplier: float = 8
 
 var fall_multiplier: float = 0.0
 
-export var controller_nb: int = -1 # assigned to a controller
+export var controller_nb: int = 0 # assigned to a controller
 var id: int = -1
 
 
@@ -80,7 +80,8 @@ func scale_x_children(new_scale: int):
 	
 	$RibbonPhysic.position.x = -1 if new_scale == 1 else 1
 	
-
+func is_input_punch_pressed(event)-> bool:
+	return event.is_action_pressed("ui_punch"+str(controller_nb))
 		
 		
 func punch():
@@ -167,11 +168,13 @@ func _physics_process(delta):
 				velocity += Vector2.DOWN * cur_gravity * delta
 		
 	# jump/fall mutliplier
+#	if velocity.y < -0.1 && Input.is_action_just_released("ui_jump"+str(controller_nb)) or Input.is_joy_button_just_released(controller_nb, JOY_XBOX_A):
 	if velocity.y < -0.1 && Input.is_action_just_released("ui_jump"+str(controller_nb)):
 		velocity += Vector2.DOWN * cur_gravity * delta * jump_multiplier
 		pass
 
 	if Input.is_action_just_pressed("ui_jump"+str(controller_nb)):
+#	if Input.is_action_just_pressed("ui_jump0"):
 		if control_disabled:
 			return
 		if can_jump:
@@ -204,9 +207,7 @@ func _on_JumpDirTimer_timeout():
 
 
 func _on_PassTrough_body_exited(body: PhysicsBody2D):
-	print(body.get_path())
 	if body == self:
 		return
-	print("BACK TO PHYSICS BITCH")
 	if not get_collision_layer_bit(0):
 		set_collision_layer_bit(0, true)

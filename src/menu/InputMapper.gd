@@ -15,6 +15,8 @@ const selection_color: Color = Color(0xeae1f0ff)
 var disabled: bool = true
 
 
+
+
 func open():
 	
 	cur_input = 0
@@ -50,8 +52,17 @@ func select_profile(id: int):
 	for l in $VBoxContainer/InputLines.get_children():
 		l.state = 0
 	$VBoxContainer/InputLines.get_child(0).state = 1
+	update_using_controller()
 	
-
+	
+func update_using_controller():
+	var color_joypad_text: Color
+	if ControllerManager.using_controller[cur_player]:
+		color_joypad_text = selection_color
+	else:
+		color_joypad_text = focused_color
+	
+	$HBoxContainer/Label.add_color_override("font_color", color_joypad_text)
 
 
 func _ready():
@@ -117,6 +128,10 @@ func _input(event):
 		
 	if event.is_action_pressed("ui_start0"):
 		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
+		
+	if event.is_action_pressed("ui_punch0"):
+		ControllerManager.using_controller[cur_player] = !ControllerManager.using_controller[cur_player]
+		update_using_controller()
 	
 	if p != cur_player:
 		print("cur player " + str(cur_player))

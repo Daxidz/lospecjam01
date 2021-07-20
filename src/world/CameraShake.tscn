@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/world/CameraShake.gd" type="Script" id=1]
+
+[node name="Camera2D" type="Camera2D"]
+current = true
+script = ExtResource( 1 )
+max_offset = Vector2( 7, 12 )
+zoom_time = 0.3
+
+[node name="Tween" type="Tween" parent="."]

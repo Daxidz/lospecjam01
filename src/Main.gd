@@ -113,6 +113,12 @@ func start_game():
 	
 
 func _ready():
+	for i in ControllerManager.using_controller.size():
+		if ControllerManager.using_controller[i]:
+			var joy_id = ControllerManager.get_free_joypad()
+			if joy_id != -1:
+				print("Mapping device " + str(joy_id) + " to player " + str(i))
+				InputConfig.map_joypad(joy_id, i)
 	$Music.stream = MainTheme
 	$Music.play()
 	viewport_size = get_viewport_rect().size

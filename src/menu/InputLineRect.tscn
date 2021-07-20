@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/fighter/aura.shader" type="Shader" id=1]
+[ext_resource path="res://assets/fonts/smashcat.tres" type="DynamicFont" id=3]
+[ext_resource path="res://src/menu/InputLineRect.gd" type="Script" id=5]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/target_col = Color( 0.215686, 0.192157, 0.231373, 1 )
+shader_param/replace_col = Color( 0.494118, 0.443137, 0.521569, 1 )
+
+[node name="ColorRect" type="ColorRect"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InputLine" type="HBoxContainer" parent="."]
+material = SubResource( 1 )
+margin_right = 240.0
+margin_bottom = 64.0
+focus_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="TextureRect" type="TextureRect" parent="InputLine"]
+margin_right = 118.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="InputLine"]
+margin_left = 122.0
+margin_top = 29.0
+margin_right = 240.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0.917647, 0.882353, 0.941176, 1 )
+text = "Y"
+align = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
