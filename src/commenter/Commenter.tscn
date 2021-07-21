@@ -1,8 +1,92 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://src/world/TextBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/img/commenter/commenter.png" type="Texture" id=2]
 [ext_resource path="res://src/commenter/Commenter.gd" type="Script" id=3]
+[ext_resource path="res://assets/img/commenter/commenter_buste.png" type="Texture" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 240, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 336, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 384, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 432, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 480, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 2
+atlas = ExtResource( 4 )
+region = Rect2( 528, 0, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "talk",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "happy",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": false,
+"name": "box_launch",
+"speed": 10.0
+} ]
 
 [node name="Comentator" type="Node2D"]
 script = ExtResource( 3 )
@@ -10,14 +94,24 @@ script = ExtResource( 3 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="TextBox2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 8, 5 )
+position = Vector2( 13, -21 )
 text_speed = 0.04
 
 [node name="ChangeTextTimer" type="Timer" parent="."]
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 10, 39 )
+visible = false
 z_index = 1
 texture = ExtResource( 2 )
 
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -8 )
+frames = SubResource( 13 )
+animation = "idle"
+playing = true
+
+[node name="HappyTimer" type="Timer" parent="."]
+
+[connection signal="closed" from="TextBox2" to="." method="_on_TextBox2_closed"]
 [connection signal="timeout" from="ChangeTextTimer" to="Sprite" method="_on_ChangeTextTimer_timeout"]
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

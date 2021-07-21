@@ -1,8 +1,8 @@
 extends Node
 
 
-var nb_players: int = 0
-var nb_lifes: int = 0
+var nb_players: int = 4
+var nb_lifes: int = 2
 
 
 const focused_color: Color = Color(0x7e7185ff)

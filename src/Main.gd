@@ -110,6 +110,7 @@ func start_game():
 	nb_dead = 0
 	camera.target = null
 	camera.zoom_on(Vector2(1, 1))
+	$BG2.load_random_bg()
 	
 
 func _ready():
@@ -145,21 +146,9 @@ func _input(event):
 		start_game()
 	
 	if event.is_action_pressed("ui_start0"):
-		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
+#		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
 		start_game()
 		
-#	if event.is_action_pressed("ui_start0"):
-#		if $InputMapper.disabled:
-#			enable_pause(true)
-#			$InputMapper.open()
-#		else:
-#			enable_pause(false)
-#			$InputMapper.close()
-			
-#	if event.is_action_pressed("change_player"):
-#		$Fighters.get_child(cur_fighter).control_disabled = true
-#		cur_fighter = (cur_fighter +1) % $Fighters.get_child_count()
-#		$Fighters.get_child(cur_fighter).control_disabled = false
 		
 	if event is InputEventMouseButton and event.is_pressed():
 #		spawn_splatter(event.position, Color.red)
@@ -215,6 +204,8 @@ func onDead(player):
 	players_life[player.id] -= 1
 	if players_life[player.id] == 0:
 		spawn_splatter(player.position, player.color)
+		
+		camera.add_trauma(0.6)
 		player.queue_free()
 		nb_dead+=1
 		if nb_dead == nb_players-1:
@@ -230,6 +221,9 @@ func onDead(player):
 		player.position.x = (tot_pos.x/5) * (lut_places[player.id] +1)
 		player.position.y = tot_pos.y/3
 		player.velocity = Vector2.ZERO
+		
+		camera.add_trauma(0.4)
+		
 
 
 func _on_PauseTimer_timeout():

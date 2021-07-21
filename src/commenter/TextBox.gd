@@ -71,11 +71,11 @@ func stop():
 
 
 func _on_Tween_tween_all_completed():
-	emit_signal("closed")
 	closed = true
 	visible = false
 	$Tween.disconnect("tween_all_completed", self, "_on_Tween_tween_all_completed")
 
 
 func _on_EndTimer_timeout():
+	emit_signal("closed")
 	stop()

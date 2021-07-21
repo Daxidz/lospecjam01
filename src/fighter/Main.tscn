@@ -44,6 +44,8 @@ pause_mode = 1
 material = SubResource( 1 )
 texture = ExtResource( 10 )
 
+[node name="Grafs" type="Node2D" parent="BG2"]
+
 [node name="Platforms" type="Node2D" parent="."]
 pause_mode = 1
 
@@ -73,15 +75,16 @@ one_shot = true
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="."]
 
-[node name="Comentator" parent="." instance=ExtResource( 5 )]
-position = Vector2( 0, 91 )
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-volume_db = -10.0
-
 [node name="StartPlatform" parent="." instance=ExtResource( 2 )]
 position = Vector2( 136, 118 )
 scale = Vector2( 20, 1 )
+
+[node name="Comentator" parent="." instance=ExtResource( 5 )]
+position = Vector2( 3, 119 )
+spawning_boxes = true
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
 
 [node name="LifesHBox" type="HBoxContainer" parent="."]
 anchor_right = 1.0

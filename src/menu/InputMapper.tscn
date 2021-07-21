@@ -445,4 +445,4 @@ texture = ExtResource( 7 )
 script = ExtResource( 6 )
 
 [node name="Comentator" parent="." instance=ExtResource( 14 )]
-position = Vector2( 0, 100 )
+position = Vector2( 4, 119 )

@@ -21,13 +21,7 @@ func _ready():
 	
 
 func spawn_box():
-	
-	var box = Box.instance()
-	box.position.x = rand.randi_range(0, get_viewport_rect().size.x)
-	box.position.y = 0
-	box.position = get_parent().get_node("Comentator").position
-	box.velocity = Vector2(rand.randf_range(100, 300), rand.randf_range(-30, -120))
-	get_parent().get_node("Boxes").add_child(box)
+	get_parent().get_node("Comentator").spawn_box()
 
 func spawn_platform():
 	var pos: Vector2
