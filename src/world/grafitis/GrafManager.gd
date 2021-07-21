@@ -24,7 +24,9 @@ func load_bg_set(idx: int):
 		var g = Graf.instance()
 		g.texture = load("res://assets/img/world/bg_" + str(idx)+"/" + f)
 		$Grafs.add_child(g)
-	
+
+var exporting: bool = true
+
 func get_files(path):
 	var files = []
 	var dir = Directory.new()
@@ -33,7 +35,11 @@ func get_files(path):
 
 	var file = dir.get_next()
 	while file != '':
-		if file.find(".import") == -1:
+		var import = file.find(".import")
+		if exporting and import != -1:
+			files += [file.substr(0, import)]
+			
+		if import == -1:
 			files += [file]
 			print(file)
 		file = dir.get_next()
