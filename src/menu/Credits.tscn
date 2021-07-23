@@ -18,6 +18,9 @@ margin_top = 1.0
 margin_right = 262.0
 margin_bottom = 176.0
 texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="."]
 anchor_right = 1.0
@@ -30,7 +33,7 @@ text = "Programmer  Daxid
 
 Music              Djul seb and francesco
 
-Art                  Daxid Jess
+Art                  Daxid Jess ALAIN
 
  "
 uppercase = true

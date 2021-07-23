@@ -273,13 +273,10 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -103.0
-margin_top = -11.0
-margin_bottom = 1.0
+margin_left = 137.0
+margin_top = 124.0
+margin_right = 240.0
+margin_bottom = 136.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -298,12 +295,39 @@ margin_right = 103.0
 margin_bottom = 12.0
 texture = ExtResource( 8 )
 
+[node name="Menu" type="HBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -166.0
+margin_top = -10.0
+margin_right = -124.0
+margin_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menu"]
+margin_top = 2.0
+margin_right = 27.0
+margin_bottom = 8.0
+custom_fonts/font = ExtResource( 2 )
+text = "MENU"
+uppercase = true
+
+[node name="TextureRect" type="TextureRect" parent="Menu"]
+margin_left = 31.0
+margin_right = 42.0
+margin_bottom = 11.0
+texture = ExtResource( 7 )
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 1.0
 margin_bottom = 1.0
-custom_constants/separation = 5
+custom_constants/separation = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -367,9 +391,9 @@ __meta__ = {
 }
 
 [node name="Labels" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 11.0
+margin_top = 8.0
 margin_right = 240.0
-margin_bottom = 17.0
+margin_bottom = 14.0
 
 [node name="Action" type="Label" parent="VBoxContainer/Labels"]
 margin_right = 118.0
@@ -393,9 +417,9 @@ align = 1
 uppercase = true
 
 [node name="InputLines" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 22.0
+margin_top = 16.0
 margin_right = 240.0
-margin_bottom = 126.0
+margin_bottom = 120.0
 size_flags_horizontal = 3
 script = ExtResource( 4 )
 

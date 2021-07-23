@@ -1,28 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://src/SceneSwitcher.gd" type="Script" id=1]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform float size_x = 0.008;
-uniform float size_y = 0.008;
-
-void fragment() {
-	vec2 uv = SCREEN_UV;
-	uv -= mod(uv, vec2(size_x, size_y));
-	if (size_x == 0. || size_y == 0.) {
-		COLOR.rgb = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb;
-	} else {
-		COLOR.rgb = textureLod(SCREEN_TEXTURE, uv, 0.0).rgb;
-	}
-	
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-shader_param/size_x = 0.008
-shader_param/size_y = 0.008
 
 [node name="SceneChanger" type="Control"]
 anchor_right = 1.0
@@ -31,18 +9,3 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource( 2 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="FadeIn" type="Tween" parent="."]
-
-[node name="FadeOut" type="Tween" parent="."]
-
-[connection signal="tween_all_completed" from="FadeIn" to="." method="_on_FadeIn_tween_all_completed"]
-[connection signal="tween_all_completed" from="FadeOut" to="." method="_on_FadeOut_tween_all_completed"]

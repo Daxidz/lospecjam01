@@ -1,6 +1,6 @@
 extends Node
 
-var using_controller = [true, false, false, true]
+var using_controller = [true, false, false, false]
 
 var controller_connected = [false, false, false, false]
 
