@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/img/world/bg.png" type="Texture" id=1]
+[ext_resource path="res://src/world/Platform.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/world/Box.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/fonts/smashcat.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/img/menu/B.png" type="Texture" id=5]
+[ext_resource path="res://assets/img/menu/A2.png" type="Texture" id=6]
+[ext_resource path="res://src/menu/TestInputMenu.gd" type="Script" id=7]
+
+[node name="TestInputMenu" type="Node2D"]
+script = ExtResource( 7 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -20, -30 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Platform2" parent="." instance=ExtResource( 2 )]
+position = Vector2( -2, 67 )
+rotation = 1.5708
+scale = Vector2( 5, 1 )
+
+[node name="Platform" parent="." instance=ExtResource( 2 )]
+position = Vector2( 126, 131 )
+scale = Vector2( 10, 1 )
+
+[node name="Platform3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 244, 52 )
+rotation = -1.5708
+scale = Vector2( 5, 1 )
+
+[node name="Platform5" parent="." instance=ExtResource( 2 )]
+position = Vector2( 176, 47 )
+
+[node name="Platform4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 55, 74 )
+scale = Vector2( 1.5, 1 )
+
+[node name="Box2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 46, 66 )
+
+[node name="Box" parent="." instance=ExtResource( 3 )]
+position = Vector2( 197, 121 )
+
+[node name="Return" type="HBoxContainer" parent="."]
+margin_left = 4.0
+margin_top = 7.0
+margin_right = 61.0
+margin_bottom = 19.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Return"]
+margin_right = 12.0
+margin_bottom = 12.0
+texture = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="Return"]
+margin_left = 16.0
+margin_top = 3.0
+margin_right = 57.0
+margin_bottom = 9.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.917647, 0.882353, 0.941176, 1 )
+text = "RETURN"
+uppercase = true
+
+[node name="Start" type="HBoxContainer" parent="."]
+margin_left = 188.0
+margin_top = 7.0
+margin_right = 238.0
+margin_bottom = 19.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Start"]
+margin_top = 3.0
+margin_right = 34.0
+margin_bottom = 9.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.917647, 0.882353, 0.941176, 1 )
+text = "START"
+uppercase = true
+
+[node name="TextureRect" type="TextureRect" parent="Start"]
+margin_left = 38.0
+margin_right = 49.0
+margin_bottom = 12.0
+texture = ExtResource( 6 )

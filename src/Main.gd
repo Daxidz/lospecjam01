@@ -6,9 +6,10 @@ const Box = preload("res://src/world/Box.tscn")
 const Splater = preload("res://BloodSplatter.tscn")
 const LifesBar = preload("res://src/menu/Lifes.tscn")
 
-#const HitSound = preload("res://assets/sounds/hit.wav")
-const HitSound = preload("res://assets/sounds/SFXO1.wav")
-const MainTheme = preload("res://assets/sounds/musics/main_theme.wav")
+const MainTheme = preload("res://assets/sounds/musics/main_theme0.wav")
+const exposion_sound = preload("res://assets/sounds/SFX/explosion.wav")
+onready var spawn_sound = load("res://assets/sounds/SFX/spawn.wav")
+onready var start_sound = load("res://assets/sounds/SFX/start_fight.wav")
 
 export var pause_time: float = 0.02
 
@@ -62,12 +63,13 @@ func reset_fighters():
 		f.controller_nb = i
 		f.id = i
 		f.color = Color(lut_colors[i])
+		f.control_disabled = true
 		$Fighters.add_child(f)
 		
 		#Spawn life bars
 		var l = LifesBar.instance()
 		l.nb_life = GameOptions.nb_lifes
-		l.alignment = 1
+		l.get_node("HBoxContainer").alignment = 1
 		l.color = Color(lut_colors[i])
 		$LifesHBox.add_child(l)
 		players_life[i] = GameOptions.nb_lifes
@@ -91,26 +93,31 @@ func start_game():
 		p.queue_free()
 	game_running = true
 	fight_running = true
+	paused = false
 	enable_start_platform(true)
 	
-	if use_platform:
-		$PlatformTimer.start(5)
 		
 	set_game_speed(1)
-	
+		
 	nb_players = GameOptions.nb_players
 	reset_fighters()
 	enable_players(false)
 	delete_boxes()
 	delete_splaters()
-	if inactive_time != 0.0:
-		$SpawnTimer.start(inactive_time)
-	else:
-		enable_players(true)
+	enable_pause(false)
+	Sounds.play_sfx_pos(spawn_sound, position)
+	
 	nb_dead = 0
+	
 	camera.target = null
 	camera.zoom_on(Vector2(1, 1))
+	
+	yield(get_tree().create_timer(0.2), "timeout")
+	enable_players(true)
+	
 	$BG2.load_random_bg()
+	
+	$PauseMenu/Control.visible = false
 	
 
 func _ready():
@@ -120,8 +127,8 @@ func _ready():
 			if joy_id != -1:
 				print("Mapping device " + str(joy_id) + " to player " + str(i))
 				InputConfig.map_joypad(joy_id, i)
-	$Music.stream = MainTheme
-	$Music.play()
+	music.stream = MainTheme
+	music.play()
 	viewport_size = get_viewport_rect().size
 	start_game()
 	
@@ -134,20 +141,36 @@ func _process(delta):
 func enable_pause(enabled: bool):
 	if enabled:
 		get_tree().paused = true
-		$Fighters.visible = false
 		$Comentator.visible = false
+		paused = true
+		$PauseMenu/Control.visible = true
+		music.volume_db = -8
 	else:
+		music.volume_db = 0
+		$PauseMenu/Control.visible = false
+		paused = false
 		get_tree().paused = false
-		$Fighters.visible = true
 		$Comentator.visible = true
 
+func show_pause_menu():
+	$PauseMenu/Control.visible = true
+	
+var paused: bool = false
+
 func _input(event):
-	if event.is_action_pressed("ui_jump0") and not fight_running:
+	if event.is_action_pressed("ui_jump0") and (not fight_running or paused):
 		start_game()
 	
-	if event.is_action_pressed("ui_start0"):
-#		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
-		start_game()
+	if event.is_action_pressed("ui_punch0") and (not fight_running or paused):
+		set_game_speed(1.0)
+		enable_pause(false)
+		SceneSwitcher.goto_scene("res://src/menu/MenuPrincipal.tscn")
+		
+	
+	if event.is_action_pressed("ui_start0") and fight_running and paused:
+		enable_pause(false)
+	elif event.is_action_pressed("ui_start0") and fight_running and not paused:
+		enable_pause(true)
 		
 		
 	if event is InputEventMouseButton and event.is_pressed():
@@ -155,7 +178,6 @@ func _input(event):
 		var b = Box.instance()
 		b.position = event.position
 		$Boxes.add_child(b)
-		pass
 
 func fight_end(player):
 	fight_running = false
@@ -163,12 +185,15 @@ func fight_end(player):
 	print(player.get_path())
 	camera.target = player.get_path()
 	camera.zoom_on(Vector2(0.5,0.5))
+	$PauseMenu/Control.visible = true
 
 func game_end():
 	pass
 	
 
 onready var camera = get_node("Node2D/Camera2D")
+onready var sfx = Sounds.get_node("SFX")
+onready var music = Sounds.get_node("Music")
 
 func onPunched(player):
 	$PauseTimer.start(pause_time)
@@ -176,12 +201,8 @@ func onPunched(player):
 	camera.decay = 0.8
 	camera.add_trauma(0.5)
 	$Comentator.next_text()
-	$SFX.position = player.position
-	$SFX.set_stream(HitSound)
-	$SFX.pitch_scale = rand_range(0.8, 1.1)
 	spawn_splatter(player.position, player.color, Vector2(0.1, 0.1),Vector2(0.4, 0.4), true)
-	
-	$SFX.play()
+
 	
 	
 func spawn_splatter(_position: Vector2, _color: Color, _scale_big: Vector2 = Vector2(1.0, 1.0), _scale_small: Vector2 = Vector2(1.0, 1.0), enabled: bool = false):
@@ -204,10 +225,11 @@ func onDead(player):
 	players_life[player.id] -= 1
 	if players_life[player.id] == 0:
 		spawn_splatter(player.position, player.color)
-		
+		Sounds.play_sfx_pos(exposion_sound, player.position, -8, 0.9)
 		camera.add_trauma(0.6)
 		player.queue_free()
 		nb_dead+=1
+		$Comentator.new_text("CAT DOWN!")
 		if nb_dead == nb_players-1:
 			for f in $Fighters.get_children():
 				if f != player:
@@ -216,13 +238,16 @@ func onDead(player):
 	elif players_life[player.id] < 0:
 		return
 	else: 
+		player.visible = false
 		var tot_pos = get_viewport_rect().size
 		spawn_splatter(player.position, player.color, Vector2(0.6, 0.6))
+		camera.add_trauma(0.4)
 		player.position.x = (tot_pos.x/5) * (lut_places[player.id] +1)
 		player.position.y = tot_pos.y/3
 		player.velocity = Vector2.ZERO
+		player.visible = true
+		player.make_invicible()
 		
-		camera.add_trauma(0.4)
 		
 
 

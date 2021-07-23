@@ -12,6 +12,8 @@ export var lenght: int = 5
 export var time_to_next: float = 2.0
 export var texture: Texture
 
+onready var punch_sound = load("res://assets/sounds/SFX/punch_caisse.wav")
+
 func _ready():
 	$DampedSpringJoint2D.length = lenght
 	$Panneau.position.y = -lenght
@@ -29,6 +31,9 @@ func get_punched(enemy_pos, knockback_power):
 	
 	$Panneau.apply_central_impulse(velocity)
 	$Panneau.apply_torque_impulse(0.5)
+	
+	
+	Sounds.play_sfx_pos(punch_sound, position)
 	
 	if !is_punched:
 		is_punched = true

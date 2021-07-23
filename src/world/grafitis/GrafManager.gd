@@ -11,7 +11,7 @@ func _ready():
 	load_random_bg()
 	
 func load_random_bg():
-	load_bg_set(rand.randi_range(0,2))
+	load_bg_set(rand.randi_range(0,3))
 
 func clear_bg():
 	for g in $Grafs.get_children():

@@ -1,4 +1,4 @@
-extends HBoxContainer
+extends Control
 
 tool
 
@@ -14,17 +14,12 @@ export var color: Color
 func _ready():
 	cur_life = nb_life
 	for i in nb_life:
-		var l = LifeCounter.instance()
-		l.texture = load("res://assets/img/fighter/life.png")
-		l.material.set_shader_param("color", color)
-		add_child(l)
+		add_life_icon()
 	
 func load_full_life():
 	cur_life = nb_life
 	for i in nb_life - cur_life:
-		var l = TextureRect.new()
-		l.texture = load("res://assets/img/fighter/life.png")
-		add_child(l)
+		add_life_icon()
 		
 		
 
@@ -33,8 +28,16 @@ func lose_life():
 	if cur_life == 0:
 		return
 	cur_life -= 1
-	get_child(0).queue_free()
+	$HBoxContainer.get_child(0).queue_free()
+	
+	
+func add_life_icon():
+	var l = LifeCounter.instance()
+	l.texture = load("res://assets/img/fighter/life.png")
+	l.material.set_shader_param("color", color)
+	$HBoxContainer.add_child(l)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+
+
+func _on_Tween_tween_all_completed():
+	pass # Replace with function body.

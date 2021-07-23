@@ -149,7 +149,7 @@ graph_offset = Vector2( -407.261, -132.862 )
 extents = Vector2( 8, 9 )
 
 [sub_resource type="RectangleShape2D" id=24]
-extents = Vector2( 3, 7 )
+extents = Vector2( 4, 7 )
 
 [sub_resource type="Shader" id=25]
 resource_local_to_scene = true
@@ -239,6 +239,7 @@ scale_curve = SubResource( 37 )
 extents = Vector2( 3, 8 )
 
 [node name="Fighter" type="KinematicBody2D"]
+pause_mode = 1
 material = SubResource( 1 )
 collision_mask = 0
 script = ExtResource( 2 )
@@ -255,7 +256,6 @@ material = SubResource( 2 )
 z_index = 1
 texture = ExtResource( 1 )
 hframes = 15
-frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -278,7 +278,6 @@ active = true
 parameters/playback = SubResource( 22 )
 
 [node name="Hitbox" type="Area2D" parent="."]
-visible = false
 collision_layer = 4
 collision_mask = 2
 
@@ -287,7 +286,6 @@ position = Vector2( 11, -4 )
 shape = SubResource( 23 )
 
 [node name="Hurbox" type="Area2D" parent="."]
-visible = false
 collision_layer = 2
 collision_mask = 4
 
@@ -329,10 +327,13 @@ wait_time = 0.25
 one_shot = true
 
 [node name="PassTrough" type="Area2D" parent="."]
+visible = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PassTrough"]
 shape = SubResource( 39 )
+
+[node name="InvicibleTimer" type="Timer" parent="."]
 
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_CoyoteTimer_timeout"]
 [connection signal="area_entered" from="Hitbox" to="." method="_on_Hitbox_area_entered"]

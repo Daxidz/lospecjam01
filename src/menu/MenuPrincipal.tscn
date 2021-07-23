@@ -72,3 +72,5 @@ position = Vector2( 278, 46 )
 rotation = -1.5708
 scale = Vector2( 5, 1 )
 collision_layer = 9
+
+[node name="SFX" type="AudioStreamPlayer2D" parent="."]

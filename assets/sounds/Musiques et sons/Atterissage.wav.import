@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Atterissage.wav-a79e972708e0a8aa779a8c67f5e8e872.sample"
+
+[deps]
+
+source_file="res://assets/sounds/Musiques et sons/Atterissage.wav"
+dest_files=[ "res://.import/Atterissage.wav-a79e972708e0a8aa779a8c67f5e8e872.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

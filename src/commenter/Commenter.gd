@@ -3,7 +3,7 @@ extends Node2D
 
 const Box = preload("res://src/world/Box.tscn")
 
-var texts = ["NICE!", "BRAVO!", "IS HE ALIVE?!", "MAKE IT RAIIIN!"]
+var texts = ["NICE!", "BRAVO!", "IS HE ALIVE?!", "MAKE IIIT\nRAIIIIIIN!", "ANOTHER ROUND\nFOR THE MAN!", "CLEAN HIT"]
 
 var rand = RandomNumberGenerator.new()
 

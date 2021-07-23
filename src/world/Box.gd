@@ -1,7 +1,11 @@
 extends KinematicBody2D
 
+onready var sfx = Sounds.get_node("SFX")
+onready var music = Sounds.get_node("Music")
 
-var gravity: int = 500
+onready var punch_sound = load("res://assets/sounds/SFX/punch_caisse.wav")
+
+var gravity: int = 400
 
 var velocity: Vector2
 var hit_power: int = 50
@@ -21,6 +25,7 @@ func get_punched(enemy_pos, knockback_power):
 	velocity.y += y_rand * punch_vec.length()*0.8
 	
 	$Particles2D.emitting = true
+	Sounds.play_sfx_pos(punch_sound, position)
 
 
 func _physics_process(delta):

@@ -47,6 +47,10 @@ onready var anim_tree = get_node("AnimationTree")
 onready var state_machine = anim_tree["parameters/playback"]
 
 
+onready var punch_sound = load("res://assets/sounds/SFX/punch.wav")
+onready var spawn_sound = load("res://assets/sounds/SFX/spawn.wav")
+onready var sfx = Sounds.get_node("SFX")
+
 func _ready():
 	$Hitbox/CollisionShape2D.disabled = true
 	$Particles2D.material.set_shader_param("color", color)
@@ -70,6 +74,8 @@ func get_punched(enemy_pos, knockback_power):
 	
 	state_machine.travel("knockback")
 	emit_signal("punched", self)
+	
+	Sounds.play_sfx_pos(punch_sound, position, -5, rand_range(0.8, 1.1))
 	
 	
 	
@@ -120,6 +126,8 @@ func get_input():
 	var cur_speed = speed
 	var in_air = !is_on_floor();
 	var dir = 0
+	if paused:
+		return
 	
 	can_rotate = $AnimationPlayer.current_animation != "attack" and $JumpDirTimer.is_stopped()
 	
@@ -184,6 +192,21 @@ func _physics_process(delta):
 			
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
+
+
+func make_invicible():
+	control_disabled = true
+	paused = true
+	$Hurbox.collision_layer = 0
+	$Hurbox.collision_mask = 0
+	yield(get_tree().create_timer(0.7), "timeout")
+	Sounds.play_sfx_pos(spawn_sound, position, -13, rand_range(0.8, 1.1))
+	control_disabled = false
+	paused = false
+	yield(get_tree().create_timer(0.4), "timeout")
+	$Hurbox.collision_layer = 2
+	$Hurbox.collision_mask = 4
+	
 
 
 func _on_CoyoteTimer_timeout():

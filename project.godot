@@ -26,10 +26,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
-SceneSwitcher="*res://src/SceneSwitcher.gd"
 InputConfig="*res://src/menu/InputConfig.gd"
 GameOptions="*res://Globals/GameOptions.gd"
 ControllerManager="*res://Globals/ControllerManager.gd"
+Sounds="*res://Globals/Sounds.tscn"
+SceneSwitcher="*res://Globals/SceneSwitcherr.tscn"
 
 [display]
 
