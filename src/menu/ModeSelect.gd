@@ -44,6 +44,7 @@ func _input(event):
 	if event.is_action_pressed("ui_jump0"):
 		GameOptions.nb_players = nb_player
 		GameOptions.nb_lifes = cur_nb_life
+		ControllerManager.free_joypad(0)
 		SceneSwitcher.goto_scene(gamemode_scenes[cur_gamemode])
 		
 		
@@ -79,10 +80,3 @@ func _input(event):
 	elif event.is_action_pressed("ui_up0"):
 		cur_line = 2 if cur_line == 0 else cur_line-1
 		update_line()
-	
-	print("Cur line: " + str(cur_line))
-	print("Cur gamemode: " + str(cur_gamemode))
-	print("Cur nb player: " + str(nb_player))
-		
-			
-			

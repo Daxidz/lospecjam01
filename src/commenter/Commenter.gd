@@ -43,13 +43,15 @@ func next_text():
 	
 func new_text(new_text: String):
 	if !$TextBox2.closed:
-		return
+		return false
 	
 	$AnimatedSprite.animation = "talk"
 	var text = new_text
 	
 	$TextBox2.text = text
 	$TextBox2.start()
+	
+	return true
 
 func _on_ChangeTextTimer_timeout():
 	next_text()

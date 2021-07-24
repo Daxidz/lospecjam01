@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/menu/PanneauPlay.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/img/world/bg.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://assets/img/menu/panneau_credits.png" type="Texture" id=9]
 [ext_resource path="res://src/menu/PanneauQuit.gd" type="Script" id=10]
 [ext_resource path="res://assets/img/menu/panneau_quit.png" type="Texture" id=11]
+[ext_resource path="res://src/commenter/Commenter.tscn" type="PackedScene" id=12]
 
 [node name="MenuPrincipal" type="Node2D"]
 script = ExtResource( 8 )
@@ -26,7 +27,7 @@ position = Vector2( 120, 14 )
 position = Vector2( 230, 35 )
 
 [node name="Box" parent="." instance=ExtResource( 5 )]
-position = Vector2( 25, 94 )
+position = Vector2( 67, 106 )
 
 [node name="Fighter" parent="." instance=ExtResource( 4 )]
 position = Vector2( 108, 77 )
@@ -89,3 +90,18 @@ scale = Vector2( 5, 1 )
 collision_layer = 9
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="."]
+
+[node name="Comentator" parent="." instance=ExtResource( 12 )]
+position = Vector2( 4, 118 )
+
+[node name="ComTimer" type="Timer" parent="."]
+wait_time = 8.0
+one_shot = true
+
+[node name="Platform4" parent="." instance=ExtResource( 3 )]
+position = Vector2( 116, -26 )
+rotation = 3.14159
+scale = Vector2( 10, 1 )
+
+[connection signal="punched" from="Fighter" to="." method="_on_Fighter_punched"]
+[connection signal="timeout" from="ComTimer" to="." method="_on_ComTimer_timeout"]

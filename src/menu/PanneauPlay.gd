@@ -38,6 +38,7 @@ func get_punched(enemy_pos, knockback_power):
 	if !is_punched:
 		is_punched = true
 		$NextSceneTimer.start(time_to_next)
+		
 	
 	
 

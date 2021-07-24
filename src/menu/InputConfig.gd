@@ -103,7 +103,8 @@ func map_joypad(joy_id: int, profile_id: int):
 		new_event.set_button_index(config_joypad[k])
 		if !InputMap.has_action(k+str(profile_id)):
 			InputMap.add_action(k+str(profile_id))
-		InputMap.action_add_event(k+str(profile_id), new_event)
+		if !InputMap.action_has_event(k+str(profile_id), new_event):
+			InputMap.action_add_event(k+str(profile_id), new_event)
 		
 	
 

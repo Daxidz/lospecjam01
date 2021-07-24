@@ -64,6 +64,8 @@ func reset_fighters():
 		f.id = i
 		f.color = Color(lut_colors[i])
 		f.control_disabled = true
+		f.connect("punched", self, "onPunched")
+		f.connect("dead", self, "onDead")
 		$Fighters.add_child(f)
 		
 		#Spawn life bars

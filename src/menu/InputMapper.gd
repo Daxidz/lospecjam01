@@ -132,6 +132,16 @@ func _input(event):
 	if event.is_action_pressed("ui_punch0"):
 		ControllerManager.using_controller[cur_player] = !ControllerManager.using_controller[cur_player]
 		update_using_controller()
+		var nb_connected = 0
+		var using_controller = 0
+		for j in 4:
+			if ControllerManager.using_controller[j]:
+				using_controller += 1
+			if ControllerManager.controller_connected[j]:
+				nb_connected += 1
+		if using_controller > nb_connected:
+			$Comentator.new_text("YOU DONT HAVE ENOUGH\nJOYPADS CONNECTED!\nCONNECT ANOTHER!")
+			
 	
 	if p != cur_player:
 		print("cur player " + str(cur_player))

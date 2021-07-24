@@ -57,8 +57,8 @@ func _ready():
 	$Sprite.material.set_shader_param("color", color)
 	$RibbonPhysic/Line2D.default_color = color
 	state_machine.travel("idle")
-	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
-	connect("dead", get_tree().get_root().get_node("Main"), "onDead")
+#	connect("punched", get_tree().get_root().get_node("Main"), "onPunched")
+#	connect("dead", get_tree().get_root().get_node("Main"), "onDead")
 	paused = false
 	
 func get_punched(enemy_pos, knockback_power):
@@ -74,6 +74,7 @@ func get_punched(enemy_pos, knockback_power):
 	
 	state_machine.travel("knockback")
 	emit_signal("punched", self)
+	print("punched")
 	
 	Sounds.play_sfx_pos(punch_sound, position, -5, rand_range(0.8, 1.1))
 	

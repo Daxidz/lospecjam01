@@ -1,6 +1,6 @@
 extends Node
 
-var using_controller = [true, false, false, false]
+var using_controller = [true, true, true, true]
 
 var controller_connected = [false, false, false, false]
 
@@ -9,15 +9,13 @@ var controller_free = [true, true, true, true]
 
 func _ready():
 	for c in Input.get_connected_joypads():
-		print(c)
+		controller_connected[c] = true
 	Input.connect("joy_connection_changed", self, "onJoyConChanged")
 
 
 func onJoyConChanged(device: int, connected: bool):
-	print("Device " + str(device))
-	print("Connected: " + str(connected))
 	controller_connected[device] = connected
-	controller_free[device] = !connected
+	controller_free[device] = connected
 	
 func get_free_joypad()->int:
 	
